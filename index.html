@@ -1,0 +1,3002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SproutLight Capital - Private Portal</title>
+    <style>
+        /* =====================================================
+           ROOT VARIABLES - Easy Color Management
+           ===================================================== */
+        :root {
+            /* Dark Theme Colors */
+            --dark-bg-primary: #0a0a0a;
+            --dark-bg-secondary: #1a1a1a;
+            --dark-bg-card: #1e1e1e;
+            --dark-text-primary: #ffffff;
+            --dark-text-secondary: #b0b0b0;
+            --dark-border: #333333;
+
+            /* Light Theme Colors */
+            --light-bg-primary: #f8f9fa;
+            --light-bg-secondary: #ffffff;
+            --light-bg-card: #ffffff;
+            --light-text-primary: #1a1a1a;
+            --light-text-secondary: #666666;
+            --light-border: #e0e0e0;
+
+            /* Accent Colors - Gold Theme */
+            --gold-primary: #d4af37;
+            --gold-secondary: #f4d03f;
+            --gold-dark: #b8941f;
+            --success-green: #10b981;
+            --error-red: #ef4444;
+
+            /* Glass Effect */
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(20px);
+
+            /* Active Theme (default dark) */
+            --bg-primary: var(--dark-bg-primary);
+            --bg-secondary: var(--dark-bg-secondary);
+            --bg-card: var(--dark-bg-card);
+            --text-primary: var(--dark-text-primary);
+            --text-secondary: var(--dark-text-secondary);
+            --border-color: var(--dark-border);
+        }
+
+        /* Light Theme Class */
+        body.light-theme {
+            --bg-primary: var(--light-bg-primary);
+            --bg-secondary: var(--light-bg-secondary);
+            --bg-card: var(--light-bg-card);
+            --text-primary: var(--light-text-primary);
+            --text-secondary: var(--light-text-secondary);
+            --border-color: var(--light-border);
+            --glass-bg: rgba(0, 0, 0, 0.02);
+            --glass-border: rgba(0, 0, 0, 0.08);
+        }
+
+        /* =====================================================
+           GLOBAL STYLES
+           ===================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* =====================================================
+           REFINED GEOMETRIC GRID BACKGROUND
+           ===================================================== */
+
+        /* Vertical Lines with Animated Tracer */
+        .grid-vertical {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image: repeating-linear-gradient(90deg,
+                    transparent,
+                    transparent 99px,
+                    rgba(212, 175, 55, 0.12) 99px,
+                    rgba(212, 175, 55, 0.12) 100px);
+        }
+
+        .grid-vertical::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg,
+                    rgba(212, 175, 55, 0) 0%,
+                    rgba(212, 175, 55, 0.5) 50%,
+                    rgba(212, 175, 55, 0) 100%);
+            background-size: 100% 300px;
+            animation: verticalScan 8s linear infinite;
+            opacity: 0.4;
+        }
+        @keyframes verticalScan {
+            0% {
+                background-position: 0 -160px;
+            }
+
+            100% {
+                background-position: 0 160px;
+            }
+        }
+
+        /* Horizontal Lines with Animated Tracer */
+        .grid-horizontal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 99px,
+                    rgba(212, 175, 55, 0.12) 99px,
+                    rgba(212, 175, 55, 0.12) 100px);
+        }
+
+        .grid-horizontal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    rgba(244, 208, 63, 0) 0%,
+                    rgba(244, 208, 63, 0.5) 50%,
+                    rgba(244, 208, 63, 0) 100%);
+            background-size: 300px 100%;
+            animation: horizontalScan 10s linear infinite;
+            opacity: 0.4;
+        }
+
+        /* Tech Dots Pattern */
+        .tech-dots {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                radial-gradient(circle, rgba(212, 175, 55, 0.15) 1px, transparent 1px);
+            background-size: 100px 100px;
+            opacity: 0.3;
+        }
+
+        /* Corner Accent Lines */
+        .corner-accent {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .corner-accent.top-left {
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            border-top: 2px solid rgba(212, 175, 55, 0.6);
+            border-left: 2px solid rgba(212, 175, 55, 0.6);
+        }
+
+        .corner-accent.top-right {
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            border-top: 2px solid rgba(212, 175, 55, 0.6);
+            border-right: 2px solid rgba(212, 175, 55, 0.6);
+        }
+
+        .corner-accent.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.6);
+            border-left: 2px solid rgba(212, 175, 55, 0.6);
+        }
+
+        .corner-accent.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.6);
+            border-right: 2px solid rgba(212, 175, 55, 0.6);
+        }
+
+        /* Light Theme Adjustments */
+        body.light-theme .grid-vertical,
+        body.light-theme .grid-horizontal {
+            opacity: 0.4;
+        }
+
+        body.light-theme .tech-dots {
+            opacity: 0.2;
+        }
+
+        /* =====================================================
+           CUSTOM MODAL/POPUP STYLES
+           ===================================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 2px solid var(--gold-primary);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+            animation: modalSlideIn 0.4s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--error-red);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+            background: #dc2626;
+        }
+
+        .modal-title {
+            color: var(--gold-primary);
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-message {
+            color: var(--text-secondary);
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-spinner.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(212, 175, 55, 0.2);
+            border-top: 4px solid var(--gold-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* =====================================================
+           AUTHENTICATION SCREENS STYLES
+           ===================================================== */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-box {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .auth-logo p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            padding-right: 45px;
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            color: var(--text-primary);
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15);
+            background: var(--bg-card);
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            transition: all 0.2s ease;
+            z-index: 2;
+        }
+
+        .password-toggle:hover {
+            color: var(--gold-primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
+            color: var(--dark-bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-red);
+            color: var(--error-red);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-green);
+            color: var(--success-green);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .auth-footer a {
+            color: var(--gold-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: 8px;
+            margin-bottom: 16px;
+        }
+
+        .forgot-password a {
+            color: var(--gold-primary);
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        /* =====================================================
+           MAIN DASHBOARD STYLES
+           ===================================================== */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .navbar {
+            background: transparent;
+            padding: 10px 5%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-container {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-container:hover {
+            box-shadow: 0 12px 40px rgba(212, 175, 55, 0.15);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar-brand h2 {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-brand p {
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .nav-item:hover {
+            background: var(--glass-bg);
+            color: var(--gold-primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+            color: var(--dark-bg-primary);
+            font-weight: 600;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 10px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: var(--glass-blur);
+        }
+
+        .theme-toggle:hover {
+            background: var(--gold-primary);
+            color: var(--dark-bg-primary);
+            transform: translateY(-2px);
+        }
+
+        .logout-btn {
+            background: var(--error-red);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 10px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: var(--gold-primary);
+            color: var(--dark-bg-primary);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-left: 1px solid var(--glass-border);
+            padding: 80px 24px 24px;
+            z-index: 200;
+            transition: right 0.3s ease;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--error-red);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .mobile-nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mobile-nav-list .nav-item {
+            padding: 14px 20px;
+            border-radius: 12px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .mobile-menu-actions {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mobile-menu-actions button {
+            width: 100%;
+        }
+
+        .main-content {
+            padding: 32px 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* =====================================================
+           ANALYTICS PAGE STYLES
+           ===================================================== */
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-primary), var(--gold-secondary));
+        }
+
+        .stat-card:hover {
+            border-color: var(--gold-primary);
+            box-shadow: 0 8px 32px rgba(212, 175, 55, 0.2);
+        }
+
+        .stat-card h3 {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--gold-primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-card .stat-change {
+            font-size: 14px;
+            color: var(--success-green);
+        }
+
+        .stat-card .stat-change.negative {
+            color: var(--error-red);
+        }
+
+        .scenarios-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .scenario-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--gold-primary), var(--gold-secondary));
+        }
+
+        .scenario-card:hover {
+            border-color: var(--gold-primary);
+            box-shadow: 0 8px 32px rgba(212, 175, 55, 0.2);
+        }
+
+        .scenario-card h2 {
+            font-size: 20px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .scenario-card .scenario-rate {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .scenario-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .scenario-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .scenario-stat:last-child {
+            border-bottom: none;
+        }
+
+        .scenario-stat span:first-child {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .scenario-stat span:last-child {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .distribution-table {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .distribution-table h2 {
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .highlight-gold {
+            color: var(--gold-primary);
+            font-weight: 600;
+        }
+
+        /* =====================================================
+           MOU PAGE STYLES
+           ===================================================== */
+        .mou-container {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 48px;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .mou-container h1 {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 32px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .mou-container h2 {
+            color: var(--text-primary);
+            font-size: 20px;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid var(--gold-primary);
+            padding-bottom: 8px;
+        }
+
+        .mou-container h3 {
+            color: var(--text-primary);
+            font-size: 18px;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .mou-container p,
+        .mou-container li {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .mou-container ul {
+            margin-left: 24px;
+        }
+
+        /* =====================================================
+           FOOTER STYLES
+           ===================================================== */
+        .footer {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-top: 1px solid var(--glass-border);
+            padding: 24px 5%;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-brand h3 {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .footer-brand p {
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+            color: var(--dark-bg-primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-copyright {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           RESPONSIVE DESIGN
+           ===================================================== */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                display: none;
+            }
+
+            .navbar-actions {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .navbar-container {
+                width: 95%;
+                padding: 12px 20px;
+            }
+
+            .navbar-brand h2 {
+                font-size: 20px;
+            }
+
+            .main-content {
+                padding: 16px 3%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scenarios-container {
+                grid-template-columns: 1fr;
+            }
+
+            .mou-container {
+                padding: 24px;
+            }
+
+            .auth-box {
+                padding: 24px;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* =====================================================
+           UTILITY CLASSES
+           ===================================================== */
+        .hidden {
+            display: none !important;
+        }
+
+        .mt-1 {
+            margin-top: 8px;
+        }
+
+        .mt-2 {
+            margin-top: 16px;
+        }
+
+        .mt-3 {
+            margin-top: 24px;
+        }
+
+        .mb-1 {
+            margin-bottom: 8px;
+        }
+
+        .mb-2 {
+            margin-bottom: 16px;
+        }
+
+        .mb-3 {
+            margin-bottom: 24px;
+        }
+
+/* =====================================================
+   SPROUTLIGHT CAPITAL — FINAL BOSS (Your Exact Taste)
+   Thick lines + Your Original Corner + 100% Static
+   ===================================================== */
+
+.tech-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+/* 1. THICKER & RICHER main grid lines — no animation */
+.tech-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        /* Strong center cross — now very thick */
+        linear-gradient(90deg, transparent 49.5%, rgba(244, 208, 63, 1) 49.5%, rgba(244, 208, 63, 1) 50.5%, transparent 50.5%),
+        linear-gradient(0deg,  transparent 49.5%, rgba(244, 208, 63, 1) 49.5%, rgba(244, 208, 63, 1) 50.5%, transparent 50.5%),
+        
+        /* Fine grid — thicker */
+        repeating-linear-gradient(90deg, transparent, transparent 77px, rgba(212, 175, 55, 0.4) 77px, rgba(212, 175, 55, 0.4) 83px),
+        repeating-linear-gradient(0deg,  transparent, transparent 77px, rgba(212, 175, 55, 0.4) 77px, rgba(212, 175, 55, 0.4) 83px),
+        
+        /* Medium grid — bold */
+        repeating-linear-gradient(90deg, transparent, transparent 236px, rgba(244, 208, 63, 0.35) 236px, rgba(244, 208, 63, 0.35) 244px),
+        repeating-linear-gradient(0deg,  transparent, transparent 236px, rgba(244, 208, 63, 0.35) 236px, rgba(244, 208, 63, 0.35) 244px);
+    opacity: 0.85;
+}
+
+/* 2. Static tech dots — calm & sharp */
+.tech-dots {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image:
+        radial-gradient(circle, rgba(244, 208, 63, 0.8) 1.3px, transparent 1.3px),
+        radial-gradient(circle, rgba(212, 175, 55, 0.6) 1px, transparent 1px);
+    background-size: 80px 80px, 160px 160px;
+    background-position: 0 0, 40px 80px;
+    opacity: 0.4;
+}
+
+/* 3. YOUR EXACT ORIGINAL CORNER DESIGN — restored & perfected */
+.corner-node {
+    position: fixed;
+    width: 180px;
+    height: 180px;
+    border: 4px solid rgba(244, 208, 63, 0.95);
+    filter: drop-shadow(0 0 25px rgba(244, 208, 63, 0.8));
+    z-index: 2;
+    pointer-events: none;
+}
+.corner-node::before {
+    content: '';
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background: #f4d03f;
+    box-shadow: 0 0 40px #f4d03f;
+}
+
+/* Exact positions you loved */
+.corner-node.top-left    { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+.corner-node.top-left::before    { bottom: -14px; right: -14px; }
+
+.corner-node.top-right   { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+.corner-node.top-right::before   { bottom: -14px; left: -14px; }
+
+.corner-node.bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+.corner-node.bottom-left::before { top: -14px; right: -14px; }
+
+.corner-node.bottom-right{ bottom: 20px; right: 20px; border-left: none; border-top: none; }
+.corner-node.bottom-right::before{ top: -14px; left: -14px; }
+
+/* Light theme */
+body.light-theme .tech-bg::before { opacity: 0.35; }
+body.light-theme .tech-dots { opacity: 0.2; }
+body.light-theme .corner-node,
+body.light-theme .corner-node::before { opacity: 0.7; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)); }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         REFINED GEOMETRIC BACKGROUND
+         ===================================================== -->
+    <div class="grid-vertical"></div>
+    <div class="grid-horizontal"></div>
+    <div class="tech-dots"></div>
+    <div class="corner-accent top-left"></div>
+    <div class="corner-accent top-right"></div>
+    <div class="corner-accent bottom-left"></div>
+    <div class="corner-accent bottom-right"></div>
+
+    <!-- =====================================================
+         LOADING SPINNER
+         ===================================================== -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- =====================================================
+         CUSTOM MODAL/POPUP
+         ===================================================== -->
+    <div id="customModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <h2 class="modal-title" id="modalTitle">Notification</h2>
+            <p class="modal-message" id="modalMessage">Message goes here</p>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         INVITATION CODE SCREEN
+         ===================================================== -->
+    <div id="invitationScreen" class="auth-container">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <h1>SPROUTLIGHT CAPITAL</h1>
+                <p>Private Trading Portal</p>
+            </div>
+
+            <div id="inviteError" class="error-message"></div>
+
+            <form id="invitationForm">
+                <div class="form-group">
+                    <label for="inviteCode">Invitation Code</label>
+                    <input type="text" id="inviteCode" placeholder="Enter your invitation code" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Verify Code</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Access restricted to authorized members only</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         SIGN UP SCREEN
+         ===================================================== -->
+    <div id="signupScreen" class="auth-container hidden">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <h1>SPROUTLIGHT CAPITAL</h1>
+                <p>Create Your Account</p>
+            </div>
+
+            <div id="signupError" class="error-message"></div>
+            <div id="signupSuccess" class="success-message"></div>
+
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group password-field">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password (min 8 characters)"
+                        required>
+                    <button type="button" class="password-toggle"
+                        onclick="togglePassword('signupPassword')">👁️</button>
+                </div>
+
+                <div class="form-group password-field">
+                    <label for="signupPin">6-Digit PIN</label>
+                    <input type="password" id="signupPin" placeholder="Create a 6-digit PIN" maxlength="6" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('signupPin')">👁️</button>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create Account</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="#" id="goToLogin">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         SIGN IN SCREEN
+         ===================================================== -->
+    <div id="signinScreen" class="auth-container hidden">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <h1>SPROUTLIGHT CAPITAL</h1>
+                <p>Welcome Back</p>
+            </div>
+
+            <div id="signinError" class="error-message"></div>
+
+            <form id="signinForm">
+                <div class="form-group">
+                    <label for="signinEmail">Email Address</label>
+                    <input type="email" id="signinEmail" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group password-field">
+                    <label for="signinPassword">Password</label>
+                    <input type="password" id="signinPassword" placeholder="Enter your password" required>
+                    <button type="button" class="password-toggle"
+                        onclick="togglePassword('signinPassword')">👁️</button>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>New member? <a href="#" id="goToSignup">Create Account</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         EMAIL VERIFICATION SCREEN
+         ===================================================== -->
+    <div id="emailVerificationScreen" class="auth-container hidden">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <h1>SPROUTLIGHT CAPITAL</h1>
+                <p>Verify Your Email</p>
+            </div>
+
+            <div id="emailVerifyError" class="error-message"></div>
+            <div id="emailVerifySuccess" class="success-message"></div>
+
+            <p style="color: var(--text-secondary); text-align: center; margin-bottom: 24px;">
+                We've sent a 6-digit verification code to <strong id="verifyEmailDisplay"></strong>
+            </p>
+
+            <form id="emailVerificationForm">
+                <div class="form-group">
+                    <label for="emailVerifyCode">6-Digit Verification Code</label>
+                    <input type="text" id="emailVerifyCode" placeholder="Enter 6-digit code" maxlength="6" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Verify Email</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Didn't receive code? <a href="#" id="resendEmailCode">Resend Code</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         PIN VERIFICATION SCREEN
+         ===================================================== -->
+    <div id="pinScreen" class="auth-container hidden">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <h1>SPROUTLIGHT CAPITAL</h1>
+                <p>Verify Your Identity</p>
+            </div>
+
+            <div id="pinError" class="error-message"></div>
+
+            <form id="pinForm">
+                <div class="form-group password-field">
+                    <label for="pinCode">Enter Your 6-Digit PIN</label>
+                    <input type="password" id="pinCode" placeholder="Enter PIN" maxlength="6" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('pinCode')">👁️</button>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Verify PIN</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Keep your PIN secure and confidential</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         PASSWORD RESET SCREEN
+         ===================================================== -->
+    <div id="resetPasswordScreen" class="auth-container hidden">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <h1>SPROUTLIGHT CAPITAL</h1>
+                <p>Reset Your Password</p>
+            </div>
+
+            <div id="resetError" class="error-message"></div>
+            <div id="resetSuccess" class="success-message"></div>
+
+            <form id="resetPasswordForm">
+                <div class="form-group">
+                    <label for="resetEmail">Email Address</label>
+                    <input type="email" id="resetEmail" placeholder="Enter your email" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Send Reset Code</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Remember your password? <a href="#" id="backToLogin">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         VERIFY RESET CODE SCREEN
+         ===================================================== -->
+    <div id="verifyResetCodeScreen" class="auth-container hidden">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <h1>SPROUTLIGHT CAPITAL</h1>
+                <p>Verify Reset Code</p>
+            </div>
+
+            <div id="verifyResetError" class="error-message"></div>
+            <div id="verifyResetSuccess" class="success-message"></div>
+
+            <p style="color: var(--text-secondary); text-align: center; margin-bottom: 24px;">
+                Enter the 6-digit code sent to your email
+            </p>
+
+            <form id="verifyResetCodeForm">
+                <div class="form-group">
+                    <label for="resetVerifyCode">6-Digit Reset Code</label>
+                    <input type="text" id="resetVerifyCode" placeholder="Enter 6-digit code" maxlength="6" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Verify Code</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Didn't receive code? <a href="#" id="resendResetCode">Resend Code</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         NEW PASSWORD SCREEN
+         ===================================================== -->
+    <div id="newPasswordScreen" class="auth-container hidden">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <h1>SPROUTLIGHT CAPITAL</h1>
+                <p>Create New Password</p>
+            </div>
+
+            <div id="newPasswordError" class="error-message"></div>
+            <div id="newPasswordSuccess" class="success-message"></div>
+
+            <form id="newPasswordForm">
+                <div class="form-group password-field">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password (min 8 characters)"
+                        required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('newPassword')">👁️</button>
+                </div>
+
+                <div class="form-group password-field">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
+                    <button type="button" class="password-toggle"
+                        onclick="togglePassword('confirmPassword')">👁️</button>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Reset Password</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         MAIN DASHBOARD
+         ===================================================== -->
+    <div id="dashboard" class="dashboard">
+        <!-- Modern Navigation Bar -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-brand">
+                    <div>
+                        <h2>SPROUTLIGHT CAPITAL</h2>
+                        <p>Building The Future</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <ul class="navbar-nav">
+                    <li class="nav-item active" data-page="analytics">📊 Analytics</li>
+                    <li class="nav-item" data-page="mou">📄 MOU</li>
+                </ul>
+
+                <!-- Desktop Actions -->
+                <div class="navbar-actions">
+                    <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu" id="mobileMenu">
+            <button class="mobile-menu-close" id="mobileMenuClose">✕ Close</button>
+
+            <ul class="mobile-nav-list">
+                <li class="nav-item active" data-page="analytics">📊 Analytics & Growth</li>
+                <li class="nav-item" data-page="mou">📄 MOU Document</li>
+            </ul>
+
+            <div class="mobile-menu-actions">
+                <button class="theme-toggle" id="mobileThemeToggle">🌙 Toggle Theme</button>
+                <button class="logout-btn" id="mobileLogoutBtn">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <main class="content-area">
+                <!-- Analytics Page -->
+                <section id="analyticsPage" class="page-section active">
+                    <div class="page-header">
+                        <h1>Revenue Growth Analytics</h1>
+                        <p>Real-time projections and profit distribution for SproutLight Capital</p>
+                    </div>
+
+                    <!-- Current Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Current Capital</h3>
+                            <div class="stat-value">$1,000</div>
+                            <div class="stat-change">Initial Investment</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Target Monthly Growth</h3>
+                            <div class="stat-value">8-20%</div>
+                            <div class="stat-change">Conservative to Optimistic</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Active Traders</h3>
+                            <div class="stat-value">4</div>
+                            <div class="stat-change">ADANU (Lead), MANSUR, MOHAMAD, PAUL</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Compounding Rate</h3>
+                            <div class="stat-value">20%</div>
+                            <div class="stat-change">Reinvested Monthly</div>
+                        </div>
+                    </div>
+
+                    <!-- Growth Scenarios -->
+                    <h2 style="color: var(--text-primary); margin-bottom: 20px;">Growth Scenarios - Year 1</h2>
+                    <div class="scenarios-container">
+                        <!-- Conservative Scenario -->
+                        <div class="scenario-card">
+                            <h2>Conservative Growth</h2>
+                            <p class="scenario-rate">8% Monthly Average</p>
+                            <div class="scenario-stats">
+                                <div class="scenario-stat">
+                                    <span>Final Capital (Year 1)</span>
+                                    <span class="highlight-gold">$1,212</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>CEO Earnings</span>
+                                    <span>$399</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>Lead Trader (ADANU)</span>
+                                    <span>$126</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>Each Trader</span>
+                                    <span>$105</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>Capital Growth</span>
+                                    <span class="highlight-gold">+21.2%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Moderate Scenario -->
+                        <div class="scenario-card">
+                            <h2>Moderate Growth</h2>
+                            <p class="scenario-rate">15% Monthly Average</p>
+                            <div class="scenario-stats">
+                                <div class="scenario-stat">
+                                    <span>Final Capital (Year 1)</span>
+                                    <span class="highlight-gold">$1,427</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>CEO Earnings</span>
+                                    <span>$811</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>Lead Trader (ADANU)</span>
+                                    <span>$257</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>Each Trader</span>
+                                    <span>$214</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>Capital Growth</span>
+                                    <span class="highlight-gold">+42.7%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Optimistic Scenario -->
+                        <div class="scenario-card">
+                            <h2>Optimistic Growth</h2>
+                            <p class="scenario-rate">20% Monthly Average</p>
+                            <div class="scenario-stats">
+                                <div class="scenario-stat">
+                                    <span>Final Capital (Year 1)</span>
+                                    <span class="highlight-gold">$1,603</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>CEO Earnings</span>
+                                    <span>$1,141</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>Lead Trader (ADANU)</span>
+                                    <span>$361</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>Each Trader</span>
+                                    <span>$301</span>
+                                </div>
+                                <div class="scenario-stat">
+                                    <span>Capital Growth</span>
+                                    <span class="highlight-gold">+60.3%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profit Distribution -->
+                    <div class="distribution-table">
+                        <h2>Profit Distribution Structure</h2>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Role</th>
+                                        <th>Name</th>
+                                        <th>Share %</th>
+                                        <th>Example ($150 profit)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>CEO & Capital Provider</td>
+                                        <td class="highlight-gold">Party A</td>
+                                        <td>38%</td>
+                                        <td class="highlight-gold">$57</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lead Trader</td>
+                                        <td class="highlight-gold">ADANU</td>
+                                        <td>12%</td>
+                                        <td>$18</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trader</td>
+                                        <td>MANSUR</td>
+                                        <td>10%</td>
+                                        <td>$15</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trader</td>
+                                        <td>MOHAMAD</td>
+                                        <td>10%</td>
+                                        <td>$15</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trader</td>
+                                        <td>PAUL</td>
+                                        <td>10%</td>
+                                        <td>$15</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Reinvestment</td>
+                                        <td class="highlight-gold">Compounding</td>
+                                        <td>20%</td>
+                                        <td class="highlight-gold">$30</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Multi-Year Projection -->
+                    <div class="distribution-table">
+                        <h2>Multi-Year Growth Projection (15% Monthly Average)</h2>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th>Starting Capital</th>
+                                        <th>Ending Capital</th>
+                                        <th>CEO Net Earnings</th>
+                                        <th>ADANU Earnings</th>
+                                        <th>Each Trader Earnings</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Year 1</td>
+                                        <td>$1,000</td>
+                                        <td class="highlight-gold">$1,427</td>
+                                        <td>$211</td>
+                                        <td>$257</td>
+                                        <td>$214</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Year 2</td>
+                                        <td>$1,427</td>
+                                        <td class="highlight-gold">$7,612</td>
+                                        <td>$4,585</td>
+                                        <td>$2,436</td>
+                                        <td>$2,030</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Year 3</td>
+                                        <td>$7,612</td>
+                                        <td class="highlight-gold">$40,612</td>
+                                        <td>$29,681</td>
+                                        <td>$12,998</td>
+                                        <td>$10,832</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p style="color: var(--text-secondary); margin-top: 16px; font-size: 14px;">
+                            <strong>Note:</strong> CEO net earnings include deduction of $600 (Year 1) and $1,200 (Year
+                            2-3) for secretary salary paid externally.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- MOU Document Page -->
+                <section id="mouPage" class="page-section">
+                    <div class="mou-container">
+                        <h1>Memorandum of Understanding</h1>
+                        <h2>SPROUT-LIGHT GROUP TRADING PARTNERSHIP</h2>
+
+                        <p><strong>Date:</strong> [Insert Date]</p>
+                        <p><strong>Location:</strong> [Insert Location]</p>
+
+                        <h2>PARTIES TO THIS AGREEMENT</h2>
+
+                        <h3>PARTY A (Capital Provider & CEO):</h3>
+                        <p>Name: [Your Full Name]<br>
+                            Address: [Your Address]<br>
+                            Role: Chief Executive Officer & Capital Provider</p>
+
+                        <h3>PARTY B (Trading Partners):</h3>
+                        <ul>
+                            <li>Name: ADANU [Full Name] - Address: [Address] - <strong>LEAD TRADER</strong></li>
+                            <li>Name: MANSUR [Full Name] - Address: [Address]</li>
+                            <li>Name: MOHAMAD [Full Name] - Address: [Address]</li>
+                            <li>Name: PAUL [Full Name] - Address: [Address]</li>
+                        </ul>
+
+                        <h3>PARTY C (Secretary):</h3>
+                        <p>Name: [Secretary Full Name]<br>
+                            Address: [Secretary Address]<br>
+                            Role: Group Secretary & Administrative Officer</p>
+
+                        <h2>1. PURPOSE AND OBJECTIVES</h2>
+                        <p>This Memorandum of Understanding (MoU) establishes the Sprout-Light Group as a trading
+                            partnership with the following objectives:</p>
+                        <ul>
+                            <li>To engage in profitable trading activities using pooled capital</li>
+                            <li>To generate sustainable returns for all partners</li>
+                            <li>To build capital foundation for future business ventures under the Sprout-Light Group
+                                umbrella</li>
+                            <li>To operate with transparency, mutual respect, and shared accountability</li>
+                        </ul>
+
+                        <h2>2. CAPITAL STRUCTURE AND RESOURCES</h2>
+                        <p><strong>Initial Trading Capital:</strong> USD $1,000 (One Thousand US Dollars)</p>
+                        <p><strong>Capital Provider:</strong> Party A provides 100% of initial trading capital</p>
+                        <p><strong>Capital Ownership:</strong> All capital remains the property of Party A unless
+                            otherwise amended</p>
+
+                        <h3>Operational Resources Provided by Party A:</h3>
+                        <ul>
+                            <li>Trading screens/monitors for trading operations</li>
+                            <li>Laptops/computers for all active traders</li>
+                            <li>Internet connectivity and data subscriptions</li>
+                            <li>Electricity bills and power backup systems</li>
+                            <li>Trading software subscriptions and tools</li>
+                            <li>Office space/co-working space (if applicable)</li>
+                            <li>Any other operational expenses necessary for trading activities</li>
+                        </ul>
+
+                        <h2>3. ROLES AND RESPONSIBILITIES</h2>
+
+                        <h3>3.1 Party A (CEO) Responsibilities:</h3>
+                        <ul>
+                            <li>Provide initial and ongoing trading capital as agreed</li>
+                            <li>Provide all necessary operational resources (equipment, internet, electricity, software)
+                            </li>
+                            <li>Cover all bills and operational expenses</li>
+                            <li>Pay secretary salary from external funds (not from trading profits)</li>
+                            <li>Oversee strategic direction of the group</li>
+                            <li>Final authority on major decisions</li>
+                            <li>Receive monthly reports from Lead Trader</li>
+                            <li>Right to audit trading activities at any time</li>
+                        </ul>
+
+                        <h3>3.2 Lead Trader (ADANU) Responsibilities:</h3>
+                        <ul>
+                            <li>Coordinate daily trading activities among all traders</li>
+                            <li>Review and approve major trades before execution</li>
+                            <li>Provide weekly consolidated reports to Party A</li>
+                            <li>Mentor and guide other traders</li>
+                            <li>Lead strategy discussions and risk management</li>
+                            <li>Ensure all traders follow agreed trading rules</li>
+                            <li>Final decision on trade execution during market hours</li>
+                            <li>Maintain team discipline and accountability</li>
+                        </ul>
+
+                        <h3>3.3 Party B (All Traders) Responsibilities:</h3>
+                        <ul>
+                            <li>Execute trading strategies with skill and diligence</li>
+                            <li>Follow the Lead Trader's coordination and guidance</li>
+                            <li>Protect capital and minimize unnecessary risks</li>
+                            <li>Maintain confidentiality of trading strategies</li>
+                            <li>Properly care for and maintain all equipment provided by Party A</li>
+                            <li>Use provided resources exclusively for Sprout-Light Group trading activities</li>
+                            <li>Return all equipment in good condition upon exit or termination</li>
+                        </ul>
+
+                        <h3>3.4 Party C (Secretary) Responsibilities:</h3>
+                        <ul>
+                            <li>Maintain accurate records of all trades and transactions</li>
+                            <li>Document weekly and monthly trading reports</li>
+                            <li>Coordinate meeting schedules and prepare meeting minutes</li>
+                            <li>Track profit distributions and payment schedules</li>
+                            <li>Maintain equipment inventory and condition reports</li>
+                            <li>Handle administrative communications within the group</li>
+                            <li>Prepare monthly financial summaries for Party A</li>
+                            <li>Maintain confidentiality of all group activities</li>
+                        </ul>
+
+                        <h2>4. PROFIT DISTRIBUTION</h2>
+                        <p><strong>Profit Calculation Period:</strong> Monthly (calculated on the last day of each
+                            month)</p>
+
+                        <h3>Profit Distribution Formula:</h3>
+                        <ul>
+                            <li>Party A (CEO): <strong>38%</strong> of monthly profits</li>
+                            <li>ADANU (Lead Trader): <strong>12%</strong> of monthly profits</li>
+                            <li>MANSUR (Trader): <strong>10%</strong> of monthly profits</li>
+                            <li>MOHAMAD (Trader): <strong>10%</strong> of monthly profits</li>
+                            <li>PAUL (Trader): <strong>10%</strong> of monthly profits</li>
+                            <li>Reinvestment Fund (Compounding): <strong>20%</strong> of monthly profits</li>
+                        </ul>
+
+                        <h3>Secretary Compensation:</h3>
+                        <p>Party C (Secretary): $100 USD fixed monthly salary, payment begins from Month 7 of
+                            operations, paid by Party A from external funds (not from trading profits).</p>
+
+                        <p><strong>Payment Schedule:</strong> Profit distributions shall be made within 7 days of
+                            month-end calculations</p>
+
+                        <h2>5. LOSS MANAGEMENT</h2>
+                        <p><strong>Loss Responsibility:</strong> All trading losses shall be borne by Party A as the
+                            capital provider</p>
+                        <p><strong>Loss Limits:</strong> Maximum monthly loss threshold should not exceed 15%. If
+                            monthly losses exceed threshold, trading must pause for review.</p>
+                        <p><strong>Accountability:</strong> Reckless trading or violation of agreed strategies may
+                            result in removal from the group</p>
+
+                        <h2>6. TERM AND TERMINATION</h2>
+                        <p><strong>Initial Term:</strong> This agreement is valid for 12 months from date of signing</p>
+                        <p><strong>Renewal:</strong> Automatically renews for additional 12-month periods unless
+                            terminated</p>
+                        <p><strong>Voluntary Exit:</strong> Must provide 30 days written notice. Entitled to unpaid
+                            profit distributions only.</p>
+
+                        <h2>7. CONFIDENTIALITY</h2>
+                        <p>All parties agree to maintain strict confidentiality regarding:</p>
+                        <ul>
+                            <li>Trading strategies and methods</li>
+                            <li>Financial performance and capital amounts</li>
+                            <li>Partner identities and personal information</li>
+                            <li>Business plans and future ventures</li>
+                        </ul>
+
+                        <h2>8. DISPUTE RESOLUTION</h2>
+                        <p>Parties agree to first attempt resolution through direct negotiation. If negotiation fails,
+                            parties agree to mediation before litigation.</p>
+
+                        <p style="text-align: center; margin-top: 40px; color: var(--text-secondary);">
+                            <em>This is a digital copy for reference. Original signed documents are maintained by all
+                                parties.</em>
+                        </p>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-brand">
+                    <div>
+                        <h3>SPROUTLIGHT CAPITAL</h3>
+                        <p>Building The Future, One Trade at a Time</p>
+                    </div>
+                </div>
+
+                <div class="footer-socials">
+                    <a href="#" class="social-link" title="Twitter">𝕏</a>
+                    <a href="#" class="social-link" title="LinkedIn">in</a>
+                    <a href="#" class="social-link" title="Telegram">✈</a>
+                    <a href="#" class="social-link" title="Instagram">📷</a>
+                </div>
+
+                <div class="footer-copyright">
+                    © 2024 SproutLight Capital. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- =====================================================
+         SUPABASE & EMAILJS LIBRARIES
+         ===================================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- =====================================================
+         JAVASCRIPT - UNIFIED CODEBASE
+         ===================================================== -->
+    <script type="module">
+        /* =====================================================
+           🔧 ADMIN CONFIGURATION - EDIT THESE VALUES
+           ===================================================== */
+
+        const CONFIG = {
+            // Master PIN for dashboard access
+            MASTER_PIN: '123456',
+
+            // Valid invitation codes
+            INVITATION_CODES: [
+                'SPROUT2024',
+                'TRADER2024',
+                'GOLD2024'
+            ],
+
+            // Supabase Configuration
+            SUPABASE: {
+                URL: 'https://bocdwvrcgfiqkyylafvk.supabase.co',
+                ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvY2R3dnJjZ2ZpcWt5eWxhZnZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzMTg4NDksImV4cCI6MjA3ODg5NDg0OX0.DNB7E3z8uOxdZ598IBDWZLbH6nOnipPaMC4HpPS1O0s'
+            },
+
+            // EmailJS Configuration
+            EMAILJS: {
+                PUBLIC_KEY: '8eSavprsuiEKNq_pH',
+                SERVICE_ID: 'service_2xlt5e7',
+                TEMPLATE_ID: 'template_im9l5or'
+            }
+        };
+
+        /* =====================================================
+           📦 INITIALIZE SERVICES
+           ===================================================== */
+
+        const { createClient } = supabase;
+
+        // Initialize Supabase
+        let db;
+        try {
+            db = createClient(CONFIG.SUPABASE.URL, CONFIG.SUPABASE.ANON_KEY);
+            console.log('✅ Supabase connected successfully');
+        } catch (error) {
+            console.error('❌ Supabase connection failed:', error);
+            showModal('Database Error', 'Failed to connect to database. Please contact support.');
+        }
+
+        // Initialize EmailJS
+        try {
+            emailjs.init(CONFIG.EMAILJS.PUBLIC_KEY);
+            console.log('✅ EmailJS initialized successfully');
+        } catch (error) {
+            console.error('⚠️ EmailJS initialization failed:', error);
+        }
+
+        /* =====================================================
+           💾 STATE MANAGEMENT
+           ===================================================== */
+
+        let currentUser = null;
+        let verificationEmail = null;
+        let resetEmail = null;
+
+        /* =====================================================
+           🛠️ UTILITY FUNCTIONS
+           ===================================================== */
+
+        // Show loading spinner
+        function showLoading() {
+            document.getElementById('loadingSpinner').classList.add('active');
+        }
+
+        // Hide loading spinner
+        function hideLoading() {
+            document.getElementById('loadingSpinner').classList.remove('active');
+        }
+
+        // Show custom modal
+        window.showModal = function (title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('customModal').classList.add('active');
+        }
+
+        // Close modal
+        window.closeModal = function () {
+            document.getElementById('customModal').classList.remove('active');
+        }
+
+        // Show error message
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Show success message
+        function showSuccess(elementId, message) {
+            const successElement = document.getElementById(elementId);
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            setTimeout(() => {
+                successElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Hide all auth screens
+        function hideAllAuthScreens() {
+            document.getElementById('invitationScreen').classList.add('hidden');
+            document.getElementById('signupScreen').classList.add('hidden');
+            document.getElementById('signinScreen').classList.add('hidden');
+            document.getElementById('emailVerificationScreen').classList.add('hidden');
+            document.getElementById('pinScreen').classList.add('hidden');
+            document.getElementById('resetPasswordScreen').classList.add('hidden');
+            document.getElementById('verifyResetCodeScreen').classList.add('hidden');
+            document.getElementById('newPasswordScreen').classList.add('hidden');
+        }
+
+        // Generate random 6-digit code
+        function generateCode() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        // Hash password (simple hash for demo - use bcrypt in production backend)
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+
+        // Toggle password visibility
+        window.togglePassword = function (fieldId) {
+            const field = document.getElementById(fieldId);
+            const button = field.nextElementSibling;
+
+            if (field.type === 'password') {
+                field.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                field.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+
+        /* =====================================================
+           📧 EMAIL SERVICE FUNCTIONS
+           ===================================================== */
+        async function sendVerificationEmail(email, code) {
+            try {
+                const templateParams = {
+                    user_email: email,      // For the "To" field
+                    to_email: email,        // Backup parameter
+                    recipient_email: email, // Another backup
+                    to_name: email.split('@')[0],
+                    verification_code: code,
+                    code: code,
+                    message: `Your SproutLight Capital verification code is: ${code}`
+                };
+
+                console.log('📧 Sending email with params:', templateParams);
+
+                const response = await emailjs.send(
+                    CONFIG.EMAILJS.SERVICE_ID,
+                    CONFIG.EMAILJS.TEMPLATE_ID,
+                    templateParams
+                );
+
+                console.log('✅ Email sent successfully!', response);
+                return true;
+            } catch (error) {
+                console.error('❌ Email sending failed:', error);
+                console.error('Error text:', error.text);
+                return false;
+            }
+        }
+
+        async function sendResetEmail(email, code) {
+            try {
+                const templateParams = {
+                    user_email: email,      // For the "To" field
+                    to_email: email,        // Backup parameter
+                    recipient_email: email, // Another backup
+                    to_name: email.split('@')[0],
+                    verification_code: code,
+                    code: code,
+                    message: `Your password reset code is: ${code}`
+                };
+
+                console.log('📧 Sending reset email with params:', templateParams);
+
+                const response = await emailjs.send(
+                    CONFIG.EMAILJS.SERVICE_ID,
+                    CONFIG.EMAILJS.TEMPLATE_ID,
+                    templateParams
+                );
+
+                console.log('✅ Reset email sent successfully!', response);
+                return true;
+            } catch (error) {
+                console.error('❌ Email sending failed:', error);
+                console.error('Error text:', error.text);
+                return false;
+            }
+        }
+
+        /* =====================================================
+           🔐 AUTHENTICATION FUNCTIONS
+           ===================================================== */
+
+        // 1. INVITATION CODE VERIFICATION
+        document.getElementById('invitationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const inviteCode = document.getElementById('inviteCode').value.trim().toUpperCase();
+
+            if (CONFIG.INVITATION_CODES.includes(inviteCode)) {
+                hideAllAuthScreens();
+                document.getElementById('signupScreen').classList.remove('hidden');
+            } else {
+                showError('inviteError', 'Invalid invitation code. Please contact administrator.');
+            }
+        });
+
+        // 2. SIGN UP
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+            const password = document.getElementById('signupPassword').value;
+            const pin = document.getElementById('signupPin').value;
+
+            // Validation
+            if (password.length < 8) {
+                showError('signupError', 'Password must be at least 8 characters long.');
+                return;
+            }
+
+            if (pin.length !== 6 || isNaN(pin)) {
+                showError('signupError', 'PIN must be exactly 6 digits.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                // Check if user already exists
+                const { data: existingUser } = await db
+                    .from('users')
+                    .select('email')
+                    .eq('email', email)
+                    .single();
+
+                if (existingUser) {
+                    hideLoading();
+                    showError('signupError', 'Email already registered. Please sign in instead.');
+                    return;
+                }
+
+                // Hash password and PIN
+                const hashedPassword = await hashPassword(password);
+                const hashedPin = await hashPassword(pin);
+
+                // Insert new user
+                const { error } = await db
+                    .from('users')
+                    .insert([{
+                        name: name,
+                        email: email,
+                        password: hashedPassword,
+                        pin: hashedPin,
+                        email_verified: false,
+                        created_at: new Date().toISOString()
+                    }]);
+
+                if (error) throw error;
+
+                hideLoading();
+                showSuccess('signupSuccess', 'Account created successfully! Redirecting to sign in...');
+
+                setTimeout(() => {
+                    hideAllAuthScreens();
+                    document.getElementById('signinScreen').classList.remove('hidden');
+                    document.getElementById('signinEmail').value = email;
+                }, 2000);
+
+            } catch (error) {
+                hideLoading();
+                console.error('Signup error:', error);
+                showError('signupError', 'Registration failed. Please try again.');
+            }
+        });
+
+        // 3. SIGN IN
+        document.getElementById('signinForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('signinEmail').value.trim().toLowerCase();
+            const password = document.getElementById('signinPassword').value;
+
+            showLoading();
+
+            try {
+                // Get user from database
+                const { data: user, error } = await db
+                    .from('users')
+                    .select('*')
+                    .eq('email', email)
+                    .single();
+
+                if (error || !user) {
+                    hideLoading();
+                    showError('signinError', 'Email not found. Please sign up first.');
+                    return;
+                }
+
+                // Verify password
+                const hashedPassword = await hashPassword(password);
+                if (user.password !== hashedPassword) {
+                    hideLoading();
+                    showError('signinError', 'Incorrect password. Please try again.');
+                    return;
+                }
+
+                currentUser = user;
+
+                // Check if email is verified
+                if (!user.email_verified) {
+                    // Generate and store verification code
+                    const code = generateCode();
+
+                    const { error: updateError } = await db
+                        .from('users')
+                        .update({ verification_code: code })
+                        .eq('email', email);
+
+                    if (updateError) throw updateError;
+
+                    // Send verification email
+                    await sendVerificationEmail(email, code);
+
+                    hideLoading();
+                    verificationEmail = email;
+                    hideAllAuthScreens();
+                    document.getElementById('emailVerificationScreen').classList.remove('hidden');
+                    document.getElementById('verifyEmailDisplay').textContent = email;
+                    showSuccess('emailVerifySuccess', 'Verification code sent to your email!');
+                } else {
+                    // Email verified, go to PIN
+                    hideLoading();
+                    hideAllAuthScreens();
+                    document.getElementById('pinScreen').classList.remove('hidden');
+                }
+
+            } catch (error) {
+                hideLoading();
+                console.error('Signin error:', error);
+                showError('signinError', 'Login failed. Please try again.');
+            }
+        });
+
+        // 4. EMAIL VERIFICATION
+        document.getElementById('emailVerificationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const code = document.getElementById('emailVerifyCode').value.trim();
+
+            if (!verificationEmail) {
+                showError('emailVerifyError', 'Session expired. Please sign in again.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                // Get user and verify code
+                const { data: user, error } = await db
+                    .from('users')
+                    .select('*')
+                    .eq('email', verificationEmail)
+                    .single();
+
+                if (error || !user) {
+                    hideLoading();
+                    showError('emailVerifyError', 'User not found. Please sign in again.');
+                    return;
+                }
+
+                if (user.verification_code !== code) {
+                    hideLoading();
+                    showError('emailVerifyError', 'Invalid verification code. Please try again.');
+                    document.getElementById('emailVerifyCode').value = '';
+                    return;
+                }
+
+                // Update user as verified
+                const { error: updateError } = await db
+                    .from('users')
+                    .update({
+                        email_verified: true,
+                        verification_code: null
+                    })
+                    .eq('email', verificationEmail);
+
+                if (updateError) throw updateError;
+
+                currentUser = { ...user, email_verified: true };
+
+                hideLoading();
+                showSuccess('emailVerifySuccess', 'Email verified successfully!');
+
+                setTimeout(() => {
+                    hideAllAuthScreens();
+                    document.getElementById('pinScreen').classList.remove('hidden');
+                }, 1000);
+
+            } catch (error) {
+                hideLoading();
+                console.error('Email verification error:', error);
+                showError('emailVerifyError', 'Verification failed. Please try again.');
+            }
+        });
+
+        // Resend email verification code
+        document.getElementById('resendEmailCode').addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            if (!verificationEmail) {
+                showError('emailVerifyError', 'Session expired. Please sign in again.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const code = generateCode();
+
+                const { error } = await db
+                    .from('users')
+                    .update({ verification_code: code })
+                    .eq('email', verificationEmail);
+
+                if (error) throw error;
+
+                await sendVerificationEmail(verificationEmail, code);
+
+                hideLoading();
+                showSuccess('emailVerifySuccess', 'New verification code sent to your email!');
+
+            } catch (error) {
+                hideLoading();
+                console.error('Resend code error:', error);
+                showError('emailVerifyError', 'Failed to resend code. Please try again.');
+            }
+        });
+
+        // 5. PIN VERIFICATION
+        document.getElementById('pinForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const pin = document.getElementById('pinCode').value;
+
+            if (!currentUser) {
+                showError('pinError', 'Session expired. Please sign in again.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const hashedPin = await hashPassword(pin);
+
+                if (currentUser.pin !== hashedPin) {
+                    hideLoading();
+                    showError('pinError', 'Incorrect PIN. Please try again.');
+                    document.getElementById('pinCode').value = '';
+                    return;
+                }
+
+                hideLoading();
+                hideAllAuthScreens();
+                document.getElementById('dashboard').style.display = 'block';
+                showModal('Welcome!', `Welcome back, ${currentUser.name}!`);
+
+            } catch (error) {
+                hideLoading();
+                console.error('PIN verification error:', error);
+                showError('pinError', 'Verification failed. Please try again.');
+            }
+        });
+
+        // 6. PASSWORD RESET - Send Code
+        document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('resetEmail').value.trim().toLowerCase();
+
+            showLoading();
+
+            try {
+                // Check if user exists
+                const { data: user, error } = await db
+                    .from('users')
+                    .select('email')
+                    .eq('email', email)
+                    .single();
+
+                if (error || !user) {
+                    hideLoading();
+                    showError('resetError', 'Email not found in our system.');
+                    return;
+                }
+
+                // Generate and store reset code
+                const code = generateCode();
+
+                const { error: updateError } = await db
+                    .from('users')
+                    .update({ reset_code: code })
+                    .eq('email', email);
+
+                if (updateError) throw updateError;
+
+                // Send reset email
+                await sendResetEmail(email, code);
+
+                resetEmail = email;
+
+                hideLoading();
+                showSuccess('resetSuccess', 'Reset code sent to your email!');
+
+                setTimeout(() => {
+                    hideAllAuthScreens();
+                    document.getElementById('verifyResetCodeScreen').classList.remove('hidden');
+                }, 2000);
+
+            } catch (error) {
+                hideLoading();
+                console.error('Password reset error:', error);
+                showError('resetError', 'Failed to send reset code. Please try again.');
+            }
+        });
+
+        // 7. PASSWORD RESET - Verify Code
+        document.getElementById('verifyResetCodeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const code = document.getElementById('resetVerifyCode').value.trim();
+
+            if (!resetEmail) {
+                showError('verifyResetError', 'Session expired. Please start again.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const { data: user, error } = await db
+                    .from('users')
+                    .select('reset_code')
+                    .eq('email', resetEmail)
+                    .single();
+
+                if (error || !user) {
+                    hideLoading();
+                    showError('verifyResetError', 'User not found. Please try again.');
+                    return;
+                }
+
+                if (user.reset_code !== code) {
+                    hideLoading();
+                    showError('verifyResetError', 'Invalid reset code. Please try again.');
+                    document.getElementById('resetVerifyCode').value = '';
+                    return;
+                }
+
+                hideLoading();
+                showSuccess('verifyResetSuccess', 'Code verified! Create new password.');
+
+                setTimeout(() => {
+                    hideAllAuthScreens();
+                    document.getElementById('newPasswordScreen').classList.remove('hidden');
+                }, 1000);
+
+            } catch (error) {
+                hideLoading();
+                console.error('Code verification error:', error);
+                showError('verifyResetError', 'Verification failed. Please try again.');
+            }
+        });
+
+        // Resend reset code
+        document.getElementById('resendResetCode').addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            if (!resetEmail) {
+                showError('verifyResetError', 'Session expired. Please start again.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const code = generateCode();
+
+                const { error } = await db
+                    .from('users')
+                    .update({ reset_code: code })
+                    .eq('email', resetEmail);
+
+                if (error) throw error;
+
+                await sendResetEmail(resetEmail, code);
+
+                hideLoading();
+                showSuccess('verifyResetSuccess', 'New reset code sent to your email!');
+
+            } catch (error) {
+                hideLoading();
+                console.error('Resend reset code error:', error);
+                showError('verifyResetError', 'Failed to resend code. Please try again.');
+            }
+        });
+
+        // 8. PASSWORD RESET - Set New Password
+        document.getElementById('newPasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword.length < 8) {
+                showError('newPasswordError', 'Password must be at least 8 characters long.');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showError('newPasswordError', 'Passwords do not match.');
+                return;
+            }
+
+            if (!resetEmail) {
+                showError('newPasswordError', 'Session expired. Please try again.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const hashedPassword = await hashPassword(newPassword);
+
+                const { error } = await db
+                    .from('users')
+                    .update({
+                        password: hashedPassword,
+                        reset_code: null
+                    })
+                    .eq('email', resetEmail);
+
+                if (error) throw error;
+
+                hideLoading();
+                showSuccess('newPasswordSuccess', 'Password reset successful! Redirecting...');
+
+                setTimeout(() => {
+                    resetEmail = null;
+                    hideAllAuthScreens();
+                    document.getElementById('signinScreen').classList.remove('hidden');
+                }, 2000);
+
+            } catch (error) {
+                hideLoading();
+                console.error('Password update error:', error);
+                showError('newPasswordError', 'Password reset failed. Please try again.');
+            }
+        });
+
+        /* =====================================================
+           🔄 NAVIGATION BETWEEN AUTH SCREENS
+           ===================================================== */
+
+        document.getElementById('goToLogin').addEventListener('click', (e) => {
+            e.preventDefault();
+            hideAllAuthScreens();
+            document.getElementById('signinScreen').classList.remove('hidden');
+        });
+
+        document.getElementById('goToSignup').addEventListener('click', (e) => {
+            e.preventDefault();
+            hideAllAuthScreens();
+            document.getElementById('signupScreen').classList.remove('hidden');
+        });
+
+        document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            hideAllAuthScreens();
+            document.getElementById('resetPasswordScreen').classList.remove('hidden');
+        });
+
+        document.getElementById('backToLogin').addEventListener('click', (e) => {
+            e.preventDefault();
+            hideAllAuthScreens();
+            document.getElementById('signinScreen').classList.remove('hidden');
+        });
+
+        /* =====================================================
+           🎨 DASHBOARD FUNCTIONALITY
+           ===================================================== */
+
+        // Theme Toggle
+        document.getElementById('themeToggle').addEventListener('click', function () {
+            document.body.classList.toggle('light-theme');
+
+            if (document.body.classList.contains('light-theme')) {
+                this.textContent = '☀️ Light';
+                document.getElementById('mobileThemeToggle').textContent = '☀️ Light Mode';
+            } else {
+                this.textContent = '🌙 Dark';
+                document.getElementById('mobileThemeToggle').textContent = '🌙 Dark Mode';
+            }
+        });
+
+        document.getElementById('mobileThemeToggle').addEventListener('click', function () {
+            document.body.classList.toggle('light-theme');
+
+            if (document.body.classList.contains('light-theme')) {
+                this.textContent = '☀️ Light Mode';
+                document.getElementById('themeToggle').textContent = '☀️ Light';
+            } else {
+                this.textContent = '🌙 Dark Mode';
+                document.getElementById('themeToggle').textContent = '🌙 Dark';
+            }
+        });
+
+        // Mobile Menu
+        document.getElementById('mobileMenuToggle').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.add('active');
+        });
+
+        document.getElementById('mobileMenuClose').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.remove('active');
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                currentUser = null;
+                verificationEmail = null;
+                resetEmail = null;
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('invitationScreen').classList.remove('hidden');
+
+                // Clear all forms
+                document.querySelectorAll('input').forEach(input => input.value = '');
+            }
+        });
+
+        document.getElementById('mobileLogoutBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                currentUser = null;
+                verificationEmail = null;
+                resetEmail = null;
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('mobileMenu').classList.remove('active');
+                document.getElementById('invitationScreen').classList.remove('hidden');
+
+                // Clear all forms
+                document.querySelectorAll('input').forEach(input => input.value = '');
+            }
+        });
+
+        // Navigation
+        const allMenuItems = document.querySelectorAll('.nav-item');
+        const pages = document.querySelectorAll('.page-section');
+
+        allMenuItems.forEach(item => {
+            item.addEventListener('click', function () {
+                // Remove active class from all items
+                allMenuItems.forEach(mi => mi.classList.remove('active'));
+
+                // Add active to clicked item
+                this.classList.add('active');
+
+                // Sync desktop and mobile
+                const pageToShow = this.getAttribute('data-page');
+                allMenuItems.forEach(mi => {
+                    if (mi.getAttribute('data-page') === pageToShow) {
+                        mi.classList.add('active');
+                    }
+                });
+
+                // Hide all pages
+                pages.forEach(page => page.classList.remove('active'));
+
+                // Show selected page
+                if (pageToShow === 'analytics') {
+                    document.getElementById('analyticsPage').classList.add('active');
+                } else if (pageToShow === 'mou') {
+                    document.getElementById('mouPage').classList.add('active');
+                }
+
+                // Close mobile menu
+                document.getElementById('mobileMenu').classList.remove('active');
+            });
+        });
+
+        /* =====================================================
+           🔍 ADMIN HELPER FUNCTIONS (CONSOLE)
+           ===================================================== */
+
+        // Get all users (Admin only - use in console)
+        window.getAllUsers = async function () {
+            try {
+                const { data, error } = await db
+                    .from('users')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                console.log('%c 👥 ALL REGISTERED USERS:', 'color: #d4af37; font-weight: bold; font-size: 16px;');
+                console.table(data.map(u => ({
+                    Name: u.name,
+                    Email: u.email,
+                    Verified: u.email_verified ? '✅' : '❌',
+                    Created: new Date(u.created_at).toLocaleDateString()
+                })));
+                return data;
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                return null;
+            }
+        };
+
+        // Get user by email (Admin only - use in console)
+        window.getUserByEmail = async function (email) {
+            try {
+                const { data, error } = await db
+                    .from('users')
+                    .select('*')
+                    .eq('email', email.toLowerCase())
+                    .single();
+
+                if (error) throw error;
+
+                console.log('%c 👤 USER DETAILS:', 'color: #d4af37; font-weight: bold; font-size: 16px;');
+                console.log({
+                    Name: data.name,
+                    Email: data.email,
+                    'Email Verified': data.email_verified ? '✅ Yes' : '❌ No',
+                    'Created': new Date(data.created_at).toLocaleString()
+                });
+                return data;
+            } catch (error) {
+                console.error('User not found:', error);
+                return null;
+            }
+        };
+
+        // Delete user (Admin only - use in console - DANGEROUS!)
+        window.deleteUser = async function (email) {
+            if (!confirm(`⚠️ WARNING: Delete user ${email}? This cannot be undone!`)) {
+                return;
+            }
+
+            try {
+                const { error } = await db
+                    .from('users')
+                    .delete()
+                    .eq('email', email.toLowerCase());
+
+                if (error) throw error;
+
+                console.log(`✅ User ${email} deleted successfully`);
+                return true;
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                return false;
+            }
+        };
+
+        // Update user email verification status (Admin only)
+        window.verifyUserEmail = async function (email) {
+            try {
+                const { error } = await db
+                    .from('users')
+                    .update({
+                        email_verified: true,
+                        verification_code: null
+                    })
+                    .eq('email', email.toLowerCase());
+
+                if (error) throw error;
+
+                console.log(`✅ User ${email} email verified successfully`);
+                return true;
+            } catch (error) {
+                console.error('Error verifying user:', error);
+                return false;
+            }
+        };
+
+        /* =====================================================
+           📊 CONSOLE WELCOME MESSAGE
+           ===================================================== */
+
+        console.log('%c ═══════════════════════════════════════════════════════════════ ', 'background: #000; color: #d4af37;');
+        console.log('%c 🏆 SPROUTLIGHT CAPITAL - LIVE PRODUCTION PORTAL 🏆 ', 'background: #d4af37; color: #000; font-size: 16px; font-weight: bold; padding: 10px;');
+        console.log('%c ═══════════════════════════════════════════════════════════════ ', 'background: #000; color: #d4af37;');
+        console.log('');
+        console.log('%c ✅ LIVE MODE - FULLY FUNCTIONAL ', 'background: #10b981; color: white; font-size: 14px; font-weight: bold; padding: 8px;');
+        console.log('');
+        console.log('%c 🔐 FEATURES ENABLED: ', 'color: #d4af37; font-weight: bold;');
+        console.log('  ✓ Supabase Database Integration');
+        console.log('  ✓ EmailJS Email Service');
+        console.log('  ✓ Email Verification with Codes');
+        console.log('  ✓ Password Reset with Email Codes');
+        console.log('  ✓ PIN Verification');
+        console.log('  ✓ Secure Password Hashing (SHA-256)');
+        console.log('  ✓ Session Management');
+        console.log('');
+        console.log('%c 🎫 VALID INVITATION CODES: ', 'color: #d4af37; font-weight: bold;');
+        CONFIG.INVITATION_CODES.forEach(code => console.log(`  • ${code}`));
+        console.log('');
+        console.log('%c 🛠️ ADMIN COMMANDS (Use in Console): ', 'background: #3b82f6; color: white; font-size: 14px; font-weight: bold; padding: 8px;');
+        console.log('  • getAllUsers() - View all registered users');
+        console.log('  • getUserByEmail("email@example.com") - Get specific user details');
+        console.log('  • verifyUserEmail("email@example.com") - Manually verify user email');
+        console.log('  • deleteUser("email@example.com") - Delete user (DANGEROUS!)');
+        console.log('');
+        console.log('%c 📧 EMAIL TEMPLATE SETUP REQUIRED: ', 'background: #f59e0b; color: white; font-size: 14px; font-weight: bold; padding: 8px;');
+        console.log('  1. Go to https://dashboard.emailjs.com/');
+        console.log('  2. Create a new email template with ID: ' + CONFIG.EMAILJS.TEMPLATE_ID);
+        console.log('  3. Add these variables to your template:');
+        console.log('     • {{to_name}} - Recipient name');
+        console.log('     • {{verification_code}} - The 6-digit code');
+        console.log('     • {{message}} - Email message');
+        console.log('');
+        console.log('%c 🗄️ DATABASE SETUP: ', 'background: #8b5cf6; color: white; font-size: 14px; font-weight: bold; padding: 8px;');
+        console.log('  Table: users');
+        console.log('  Columns:');
+        console.log('    • id (uuid, primary key)');
+        console.log('    • name (text)');
+        console.log('    • email (text, unique)');
+        console.log('    • password (text, hashed)');
+        console.log('    • pin (text, hashed)');
+        console.log('    • email_verified (boolean, default: false)');
+        console.log('    • verification_code (text, nullable)');
+        console.log('    • reset_code (text, nullable)');
+        console.log('    • created_at (timestamp)');
+        console.log('');
+        console.log('%c 🚀 YOUR PORTAL IS NOW LIVE! ', 'background: #ef4444; color: white; font-size: 16px; font-weight: bold; padding: 10px;');
+        console.log('%c Traders can now sign up and access the platform! ', 'color: #10b981; font-weight: bold;');
+        console.log('%c ═══════════════════════════════════════════════════════════════ ', 'background: #000; color: #d4af37;');
+
+    </script>
+
+</body>
+
+</html>
