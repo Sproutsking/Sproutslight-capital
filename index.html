@@ -113,6 +113,7 @@
             animation: verticalScan 8s linear infinite;
             opacity: 0.4;
         }
+
         @keyframes verticalScan {
             0% {
                 background-position: 0 -160px;
@@ -1181,90 +1182,276 @@
             margin-bottom: 24px;
         }
 
-/* =====================================================
+        /* =====================================================
    SPROUTLIGHT CAPITAL — FINAL BOSS (Your Exact Taste)
    Thick lines + Your Original Corner + 100% Static
    ===================================================== */
 
-.tech-bg {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-}
+        .tech-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
 
-/* 1. THICKER & RICHER main grid lines — no animation */
-.tech-bg::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        /* Strong center cross — now very thick */
-        linear-gradient(90deg, transparent 49.5%, rgba(244, 208, 63, 1) 49.5%, rgba(244, 208, 63, 1) 50.5%, transparent 50.5%),
-        linear-gradient(0deg,  transparent 49.5%, rgba(244, 208, 63, 1) 49.5%, rgba(244, 208, 63, 1) 50.5%, transparent 50.5%),
-        
-        /* Fine grid — thicker */
-        repeating-linear-gradient(90deg, transparent, transparent 77px, rgba(212, 175, 55, 0.4) 77px, rgba(212, 175, 55, 0.4) 83px),
-        repeating-linear-gradient(0deg,  transparent, transparent 77px, rgba(212, 175, 55, 0.4) 77px, rgba(212, 175, 55, 0.4) 83px),
-        
-        /* Medium grid — bold */
-        repeating-linear-gradient(90deg, transparent, transparent 236px, rgba(244, 208, 63, 0.35) 236px, rgba(244, 208, 63, 0.35) 244px),
-        repeating-linear-gradient(0deg,  transparent, transparent 236px, rgba(244, 208, 63, 0.35) 236px, rgba(244, 208, 63, 0.35) 244px);
-    opacity: 0.85;
-}
+        /* 1. THICKER & RICHER main grid lines — no animation */
+        .tech-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                /* Strong center cross — now very thick */
+                linear-gradient(90deg, transparent 49.5%, rgba(244, 208, 63, 1) 49.5%, rgba(244, 208, 63, 1) 50.5%, transparent 50.5%),
+                linear-gradient(0deg, transparent 49.5%, rgba(244, 208, 63, 1) 49.5%, rgba(244, 208, 63, 1) 50.5%, transparent 50.5%),
 
-/* 2. Static tech dots — calm & sharp */
-.tech-dots {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    background-image:
-        radial-gradient(circle, rgba(244, 208, 63, 0.8) 1.3px, transparent 1.3px),
-        radial-gradient(circle, rgba(212, 175, 55, 0.6) 1px, transparent 1px);
-    background-size: 80px 80px, 160px 160px;
-    background-position: 0 0, 40px 80px;
-    opacity: 0.4;
-}
+                /* Fine grid — thicker */
+                repeating-linear-gradient(90deg, transparent, transparent 77px, rgba(212, 175, 55, 0.4) 77px, rgba(212, 175, 55, 0.4) 83px),
+                repeating-linear-gradient(0deg, transparent, transparent 77px, rgba(212, 175, 55, 0.4) 77px, rgba(212, 175, 55, 0.4) 83px),
 
-/* 3. YOUR EXACT ORIGINAL CORNER DESIGN — restored & perfected */
-.corner-node {
-    position: fixed;
-    width: 180px;
-    height: 180px;
-    border: 4px solid rgba(244, 208, 63, 0.95);
-    filter: drop-shadow(0 0 25px rgba(244, 208, 63, 0.8));
-    z-index: 2;
-    pointer-events: none;
-}
-.corner-node::before {
-    content: '';
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    background: #f4d03f;
-    box-shadow: 0 0 40px #f4d03f;
-}
+                /* Medium grid — bold */
+                repeating-linear-gradient(90deg, transparent, transparent 236px, rgba(244, 208, 63, 0.35) 236px, rgba(244, 208, 63, 0.35) 244px),
+                repeating-linear-gradient(0deg, transparent, transparent 236px, rgba(244, 208, 63, 0.35) 236px, rgba(244, 208, 63, 0.35) 244px);
+            opacity: 0.85;
+        }
 
-/* Exact positions you loved */
-.corner-node.top-left    { top: 20px; left: 20px; border-right: none; border-bottom: none; }
-.corner-node.top-left::before    { bottom: -14px; right: -14px; }
+        /* 2. Static tech dots — calm & sharp */
+        .tech-dots {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            background-image:
+                radial-gradient(circle, rgba(244, 208, 63, 0.8) 1.3px, transparent 1.3px),
+                radial-gradient(circle, rgba(212, 175, 55, 0.6) 1px, transparent 1px);
+            background-size: 80px 80px, 160px 160px;
+            background-position: 0 0, 40px 80px;
+            opacity: 0.4;
+        }
 
-.corner-node.top-right   { top: 20px; right: 20px; border-left: none; border-bottom: none; }
-.corner-node.top-right::before   { bottom: -14px; left: -14px; }
+        /* 3. YOUR EXACT ORIGINAL CORNER DESIGN — restored & perfected */
+        .corner-node {
+            position: fixed;
+            width: 180px;
+            height: 180px;
+            border: 4px solid rgba(244, 208, 63, 0.95);
+            filter: drop-shadow(0 0 25px rgba(244, 208, 63, 0.8));
+            z-index: 2;
+            pointer-events: none;
+        }
 
-.corner-node.bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
-.corner-node.bottom-left::before { top: -14px; right: -14px; }
+        .corner-node::before {
+            content: '';
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            background: #f4d03f;
+            box-shadow: 0 0 40px #f4d03f;
+        }
 
-.corner-node.bottom-right{ bottom: 20px; right: 20px; border-left: none; border-top: none; }
-.corner-node.bottom-right::before{ top: -14px; left: -14px; }
+        /* Exact positions you loved */
+        .corner-node.top-left {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+        }
 
-/* Light theme */
-body.light-theme .tech-bg::before { opacity: 0.35; }
-body.light-theme .tech-dots { opacity: 0.2; }
-body.light-theme .corner-node,
-body.light-theme .corner-node::before { opacity: 0.7; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)); }
+        .corner-node.top-left::before {
+            bottom: -14px;
+            right: -14px;
+        }
+
+        .corner-node.top-right {
+            top: 20px;
+            right: 20px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-node.top-right::before {
+            bottom: -14px;
+            left: -14px;
+        }
+
+        .corner-node.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner-node.bottom-left::before {
+            top: -14px;
+            right: -14px;
+        }
+
+        .corner-node.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .corner-node.bottom-right::before {
+            top: -14px;
+            left: -14px;
+        }
+
+        /* Light theme */
+        body.light-theme .tech-bg::before {
+            opacity: 0.35;
+        }
+
+        body.light-theme .tech-dots {
+            opacity: 0.2;
+        }
+
+        body.light-theme .corner-node,
+        body.light-theme .corner-node::before {
+            opacity: 0.7;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6));
+        }
+
+
+        /* =======================================
+   DEFAULT CARD STYLE (UNAFFECTED)
+======================================= */
+        .stat-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* =======================================
+   TRADER CARD (ONLY THIS ONE IS GLASS + GOLD)
+======================================= */
+        .trader-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        /* Gold glowing line on top */
+        .trader-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 15%;
+            width: 70%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold-primary), var(--gold-secondary));
+            border-radius: 20px;
+        }
+
+        .trader-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--gold-primary);
+            margin-bottom: 8px;
+        }
+
+        .trader-card .stat-value {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--gold-secondary);
+            margin-bottom: 18px;
+        }
+
+        /* GRID LAYOUT */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* 3 cards on desktop */
+            gap: 20px;
+            width: 100%;
+        }
+
+        /* Traders list – desktop row */
+        .traders-list {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* MOBILE VIEW */
+        @media (max-width: 900px) {
+
+            /* Stack all cards vertically on mobile */
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Traders list becomes column on mobile */
+            .traders-list {
+                flex-direction: column;
+            }
+        }
+
+
+        /* Each trader row */
+        .trader-item {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 12px 15px;
+            border-radius: 16px;
+
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+
+            transition: 0.3s ease;
+        }
+
+        /* Hover glow */
+        .trader-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--gold-primary);
+            background: rgba(212, 175, 55, 0.08);
+            box-shadow: 0 4px 18px rgba(212, 175, 55, 0.15);
+        }
+
+        /* Name */
+        .trader-name {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Role Tag */
+        .trader-role {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 13px;
+            text-transform: capitalize;
+            color: var(--gold-primary);
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+        }
+
+        /* Lead role = special highlight */
+        .trader-role.lead {
+            background: rgba(212, 175, 55, 0.3);
+            border-color: var(--gold-secondary);
+            color: var(--gold-secondary);
+            font-weight: 600;
+        }
+
+        .stats-container {
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </head>
 
@@ -1621,220 +1808,243 @@ body.light-theme .corner-node::before { opacity: 0.7; filter: drop-shadow(0 0 15
                     </div>
 
                     <!-- Current Stats -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <h3>Current Capital</h3>
-                            <div class="stat-value">$1,000</div>
-                            <div class="stat-change">Initial Investment</div>
+                    <div class="stats-container">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h3>Current Capital</h3>
+                                <div class="stat-value">$1,000</div>
+                                <div class="stat-change">Initial Investment</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Target Monthly Growth</h3>
+                                <div class="stat-value">8-20%</div>
+                                <div class="stat-change">Conservative to Optimistic</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Compounding Rate</h3>
+                                <div class="stat-value">20%</div>
+                                <div class="stat-change">Reinvested Monthly</div>
+                            </div>
                         </div>
                         <div class="stat-card">
-                            <h3>Target Monthly Growth</h3>
-                            <div class="stat-value">8-20%</div>
-                            <div class="stat-change">Conservative to Optimistic</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Active Traders</h3>
-                            <div class="stat-value">4</div>
-                            <div class="stat-change">ADANU (Lead), MANSUR, MOHAMAD, PAUL</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Compounding Rate</h3>
-                            <div class="stat-value">20%</div>
-                            <div class="stat-change">Reinvested Monthly</div>
-                        </div>
-                    </div>
+                                <h3>Active Traders</h3>
+                                <div class="stat-value">4</div>
 
-                    <!-- Growth Scenarios -->
-                    <h2 style="color: var(--text-primary); margin-bottom: 20px;">Growth Scenarios - Year 1</h2>
-                    <div class="scenarios-container">
-                        <!-- Conservative Scenario -->
-                        <div class="scenario-card">
-                            <h2>Conservative Growth</h2>
-                            <p class="scenario-rate">8% Monthly Average</p>
-                            <div class="scenario-stats">
-                                <div class="scenario-stat">
-                                    <span>Final Capital (Year 1)</span>
-                                    <span class="highlight-gold">$1,212</span>
+                                <div class="traders-list">
+                                    <div class="trader-item">
+                                        <span class="trader-name">ADANU</span>
+                                        <span class="trader-role lead">Lead</span>
+                                    </div>
+
+                                    <div class="trader-item">
+                                        <span class="trader-name">MANSUR</span>
+                                        <span class="trader-role">Trader</span>
+                                    </div>
+
+                                    <div class="trader-item">
+                                        <span class="trader-name">MOHAMAD</span>
+                                        <span class="trader-role">Trader</span>
+                                    </div>
+
+                                    <div class="trader-item">
+                                        <span class="trader-name">PAUL</span>
+                                        <span class="trader-role">Trader</span>
+                                    </div>
                                 </div>
-                                <div class="scenario-stat">
-                                    <span>CEO Earnings</span>
-                                    <span>$399</span>
+                            </div>
+
+                        <!-- Growth Scenarios -->
+                        <h2 style="color: var(--text-primary); margin-bottom: 20px;">Growth Scenarios - Year 1</h2>
+                        <div class="scenarios-container">
+                            <!-- Conservative Scenario -->
+                            <div class="scenario-card">
+                                <h2>Conservative Growth</h2>
+                                <p class="scenario-rate">8% Monthly Average</p>
+                                <div class="scenario-stats">
+                                    <div class="scenario-stat">
+                                        <span>Final Capital (Year 1)</span>
+                                        <span class="highlight-gold">$1,212</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>CEO Earnings</span>
+                                        <span>$399</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>Lead Trader (ADANU)</span>
+                                        <span>$126</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>Each Trader</span>
+                                        <span>$105</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>Capital Growth</span>
+                                        <span class="highlight-gold">+21.2%</span>
+                                    </div>
                                 </div>
-                                <div class="scenario-stat">
-                                    <span>Lead Trader (ADANU)</span>
-                                    <span>$126</span>
+                            </div>
+
+                            <!-- Moderate Scenario -->
+                            <div class="scenario-card">
+                                <h2>Moderate Growth</h2>
+                                <p class="scenario-rate">15% Monthly Average</p>
+                                <div class="scenario-stats">
+                                    <div class="scenario-stat">
+                                        <span>Final Capital (Year 1)</span>
+                                        <span class="highlight-gold">$1,427</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>CEO Earnings</span>
+                                        <span>$811</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>Lead Trader (ADANU)</span>
+                                        <span>$257</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>Each Trader</span>
+                                        <span>$214</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>Capital Growth</span>
+                                        <span class="highlight-gold">+42.7%</span>
+                                    </div>
                                 </div>
-                                <div class="scenario-stat">
-                                    <span>Each Trader</span>
-                                    <span>$105</span>
-                                </div>
-                                <div class="scenario-stat">
-                                    <span>Capital Growth</span>
-                                    <span class="highlight-gold">+21.2%</span>
+                            </div>
+
+                            <!-- Optimistic Scenario -->
+                            <div class="scenario-card">
+                                <h2>Optimistic Growth</h2>
+                                <p class="scenario-rate">20% Monthly Average</p>
+                                <div class="scenario-stats">
+                                    <div class="scenario-stat">
+                                        <span>Final Capital (Year 1)</span>
+                                        <span class="highlight-gold">$1,603</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>CEO Earnings</span>
+                                        <span>$1,141</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>Lead Trader (ADANU)</span>
+                                        <span>$361</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>Each Trader</span>
+                                        <span>$301</span>
+                                    </div>
+                                    <div class="scenario-stat">
+                                        <span>Capital Growth</span>
+                                        <span class="highlight-gold">+60.3%</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Moderate Scenario -->
-                        <div class="scenario-card">
-                            <h2>Moderate Growth</h2>
-                            <p class="scenario-rate">15% Monthly Average</p>
-                            <div class="scenario-stats">
-                                <div class="scenario-stat">
-                                    <span>Final Capital (Year 1)</span>
-                                    <span class="highlight-gold">$1,427</span>
-                                </div>
-                                <div class="scenario-stat">
-                                    <span>CEO Earnings</span>
-                                    <span>$811</span>
-                                </div>
-                                <div class="scenario-stat">
-                                    <span>Lead Trader (ADANU)</span>
-                                    <span>$257</span>
-                                </div>
-                                <div class="scenario-stat">
-                                    <span>Each Trader</span>
-                                    <span>$214</span>
-                                </div>
-                                <div class="scenario-stat">
-                                    <span>Capital Growth</span>
-                                    <span class="highlight-gold">+42.7%</span>
-                                </div>
+                        <!-- Profit Distribution -->
+                        <div class="distribution-table">
+                            <h2>Profit Distribution Structure</h2>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Role</th>
+                                            <th>Name</th>
+                                            <th>Share %</th>
+                                            <th>Example ($150 profit)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>CEO & Capital Provider</td>
+                                            <td class="highlight-gold">Party A</td>
+                                            <td>38%</td>
+                                            <td class="highlight-gold">$57</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lead Trader</td>
+                                            <td class="highlight-gold">ADANU</td>
+                                            <td>12%</td>
+                                            <td>$18</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Trader</td>
+                                            <td>MANSUR</td>
+                                            <td>10%</td>
+                                            <td>$15</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Trader</td>
+                                            <td>MOHAMAD</td>
+                                            <td>10%</td>
+                                            <td>$15</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Trader</td>
+                                            <td>PAUL</td>
+                                            <td>10%</td>
+                                            <td>$15</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Reinvestment</td>
+                                            <td class="highlight-gold">Compounding</td>
+                                            <td>20%</td>
+                                            <td class="highlight-gold">$30</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
-                        <!-- Optimistic Scenario -->
-                        <div class="scenario-card">
-                            <h2>Optimistic Growth</h2>
-                            <p class="scenario-rate">20% Monthly Average</p>
-                            <div class="scenario-stats">
-                                <div class="scenario-stat">
-                                    <span>Final Capital (Year 1)</span>
-                                    <span class="highlight-gold">$1,603</span>
-                                </div>
-                                <div class="scenario-stat">
-                                    <span>CEO Earnings</span>
-                                    <span>$1,141</span>
-                                </div>
-                                <div class="scenario-stat">
-                                    <span>Lead Trader (ADANU)</span>
-                                    <span>$361</span>
-                                </div>
-                                <div class="scenario-stat">
-                                    <span>Each Trader</span>
-                                    <span>$301</span>
-                                </div>
-                                <div class="scenario-stat">
-                                    <span>Capital Growth</span>
-                                    <span class="highlight-gold">+60.3%</span>
-                                </div>
+                        <!-- Multi-Year Projection -->
+                        <div class="distribution-table">
+                            <h2>Multi-Year Growth Projection (15% Monthly Average)</h2>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Year</th>
+                                            <th>Starting Capital</th>
+                                            <th>Ending Capital</th>
+                                            <th>CEO Net Earnings</th>
+                                            <th>ADANU Earnings</th>
+                                            <th>Each Trader Earnings</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Year 1</td>
+                                            <td>$1,000</td>
+                                            <td class="highlight-gold">$1,427</td>
+                                            <td>$211</td>
+                                            <td>$257</td>
+                                            <td>$214</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Year 2</td>
+                                            <td>$1,427</td>
+                                            <td class="highlight-gold">$7,612</td>
+                                            <td>$4,585</td>
+                                            <td>$2,436</td>
+                                            <td>$2,030</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Year 3</td>
+                                            <td>$7,612</td>
+                                            <td class="highlight-gold">$40,612</td>
+                                            <td>$29,681</td>
+                                            <td>$12,998</td>
+                                            <td>$10,832</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
+                            <p style="color: var(--text-secondary); margin-top: 16px; font-size: 14px;">
+                                <strong>Note:</strong> CEO net earnings include deduction of $600 (Year 1) and $1,200
+                                (Year
+                                2-3) for secretary salary paid externally.
+                            </p>
                         </div>
-                    </div>
-
-                    <!-- Profit Distribution -->
-                    <div class="distribution-table">
-                        <h2>Profit Distribution Structure</h2>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Role</th>
-                                        <th>Name</th>
-                                        <th>Share %</th>
-                                        <th>Example ($150 profit)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>CEO & Capital Provider</td>
-                                        <td class="highlight-gold">Party A</td>
-                                        <td>38%</td>
-                                        <td class="highlight-gold">$57</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Lead Trader</td>
-                                        <td class="highlight-gold">ADANU</td>
-                                        <td>12%</td>
-                                        <td>$18</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Trader</td>
-                                        <td>MANSUR</td>
-                                        <td>10%</td>
-                                        <td>$15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Trader</td>
-                                        <td>MOHAMAD</td>
-                                        <td>10%</td>
-                                        <td>$15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Trader</td>
-                                        <td>PAUL</td>
-                                        <td>10%</td>
-                                        <td>$15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Reinvestment</td>
-                                        <td class="highlight-gold">Compounding</td>
-                                        <td>20%</td>
-                                        <td class="highlight-gold">$30</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Multi-Year Projection -->
-                    <div class="distribution-table">
-                        <h2>Multi-Year Growth Projection (15% Monthly Average)</h2>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Year</th>
-                                        <th>Starting Capital</th>
-                                        <th>Ending Capital</th>
-                                        <th>CEO Net Earnings</th>
-                                        <th>ADANU Earnings</th>
-                                        <th>Each Trader Earnings</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Year 1</td>
-                                        <td>$1,000</td>
-                                        <td class="highlight-gold">$1,427</td>
-                                        <td>$211</td>
-                                        <td>$257</td>
-                                        <td>$214</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Year 2</td>
-                                        <td>$1,427</td>
-                                        <td class="highlight-gold">$7,612</td>
-                                        <td>$4,585</td>
-                                        <td>$2,436</td>
-                                        <td>$2,030</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Year 3</td>
-                                        <td>$7,612</td>
-                                        <td class="highlight-gold">$40,612</td>
-                                        <td>$29,681</td>
-                                        <td>$12,998</td>
-                                        <td>$10,832</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <p style="color: var(--text-secondary); margin-top: 16px; font-size: 14px;">
-                            <strong>Note:</strong> CEO net earnings include deduction of $600 (Year 1) and $1,200 (Year
-                            2-3) for secretary salary paid externally.
-                        </p>
-                    </div>
                 </section>
 
                 <!-- MOU Document Page -->
