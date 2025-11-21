@@ -5,6 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SproutLight Capital - Private Portal</title>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+    <link rel="stylesheet" href="additional-style.css">
+    <link rel="stylesheet" href="tradex.css">
+    <!-- Socket.IO for real-time communication -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+    <!-- TradingView (already included) -->
+    <script src="https://s3.tradingview.com/tv.js"></script>
+
+    <!-- Lightweight Charts (already included) -->
     <style>
         /* =====================================================
            ROOT VARIABLES - Easy Color Management
@@ -1767,6 +1779,12 @@
 
                 <!-- Desktop Navigation -->
                 <ul class="navbar-nav">
+                    <li class="nav-item" data-page="tradex">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    tradex
+                </li>
                     <li class="nav-item active" data-page="analytics">📊 Analytics</li>
                     <li class="nav-item" data-page="mou">📄 MOU</li>
                 </ul>
@@ -1787,6 +1805,12 @@
             <button class="mobile-menu-close" id="mobileMenuClose">✕ Close</button>
 
             <ul class="mobile-nav-list">
+                <li class="nav-item" data-page="tradex">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    tradex
+                </li>
                 <li class="nav-item active" data-page="analytics">📊 Analytics & Growth</li>
                 <li class="nav-item" data-page="mou">📄 MOU Document</li>
             </ul>
@@ -1827,31 +1851,31 @@
                             </div>
                         </div>
                         <div class="stat-card">
-                                <h3>Active Traders</h3>
-                                <div class="stat-value">4</div>
+                            <h3>Active Traders</h3>
+                            <div class="stat-value">4</div>
 
-                                <div class="traders-list">
-                                    <div class="trader-item">
-                                        <span class="trader-name">ADANU</span>
-                                        <span class="trader-role lead">CIO</span>
-                                    </div>
+                            <div class="traders-list">
+                                <div class="trader-item">
+                                    <span class="trader-name">ADANU</span>
+                                    <span class="trader-role lead">Lead</span>
+                                </div>
 
-                                    <div class="trader-item">
-                                        <span class="trader-name">MANSUR</span>
-                                        <span class="trader-role">Trader</span>
-                                    </div>
+                                <div class="trader-item">
+                                    <span class="trader-name">MANSUR</span>
+                                    <span class="trader-role">Trader</span>
+                                </div>
 
-                                    <div class="trader-item">
-                                        <span class="trader-name">MOHAMAD</span>
-                                        <span class="trader-role">Trader</span>
-                                    </div>
+                                <div class="trader-item">
+                                    <span class="trader-name">MOHAMAD</span>
+                                    <span class="trader-role">Trader</span>
+                                </div>
 
-                                    <div class="trader-item">
-                                        <span class="trader-name">PAUL</span>
-                                        <span class="trader-role">Trader</span>
-                                    </div>
+                                <div class="trader-item">
+                                    <span class="trader-name">PAUL</span>
+                                    <span class="trader-role">Trader</span>
                                 </div>
                             </div>
+                        </div>
 
                         <!-- Growth Scenarios -->
                         <h2 style="color: var(--text-primary); margin-bottom: 20px;">Growth Scenarios - Year 1</h2>
@@ -1870,7 +1894,7 @@
                                         <span>$399</span>
                                     </div>
                                     <div class="scenario-stat">
-                                        <span> CIO (ADANU)</span>
+                                        <span>Lead Trader (ADANU)</span>
                                         <span>$126</span>
                                     </div>
                                     <div class="scenario-stat">
@@ -1898,7 +1922,7 @@
                                         <span>$811</span>
                                     </div>
                                     <div class="scenario-stat">
-                                        <span>CIO (ADANU)</span>
+                                        <span>Lead Trader (ADANU)</span>
                                         <span>$257</span>
                                     </div>
                                     <div class="scenario-stat">
@@ -1926,7 +1950,7 @@
                                         <span>$1,141</span>
                                     </div>
                                     <div class="scenario-stat">
-                                        <span>CIO (ADANU)</span>
+                                        <span>Lead Trader (ADANU)</span>
                                         <span>$361</span>
                                     </div>
                                     <div class="scenario-stat">
@@ -1962,7 +1986,7 @@
                                             <td class="highlight-gold">$57</td>
                                         </tr>
                                         <tr>
-                                            <td>CIO Trader</td>
+                                            <td>Lead Trader</td>
                                             <td class="highlight-gold">ADANU</td>
                                             <td>12%</td>
                                             <td>$18</td>
@@ -2047,6 +2071,341 @@
                         </div>
                 </section>
 
+                <section id="tradexPage" class="page-section">
+                        <nav class="app-nav" role="navigation">
+                            <button class="nav-btn active" data-target="chart-panel">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                </svg>
+                                Chart
+                            </button>
+                            <button class="nav-btn" data-target="trade-panel">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                                Trade
+                            </button>
+                            <button class="nav-btn" data-target="news-panel">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2">
+                                    </path>
+                                    <path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"></path>
+                                </svg>
+                                News
+                                <span class="nav-badge" id="news-badge" style="display:none;">0</span>
+                            </button>
+                            <button class="nav-btn" data-target="chat-panel">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                                Chat
+                            </button>
+                        </nav>
+
+                        <div class="hub-root">
+                            <div class="hub-grid">
+
+                                <!-- CHART PANEL -->
+                                <section id="chart-panel" class="panel sub-section active">
+                                    <div class="panel-head">
+                                        <div>
+                                            <div class="panel-title">Live Market Chart</div>
+                                            <div class="panel-subtitle">Real-time price action • TradingView</div>
+                                        </div>
+                                        <div class="panel-controls">
+                                            <div class="muted">BTC/USDT</div>
+                                            <button class="expand-btn" data-target="chart-panel"
+                                                title="Expand">⤢</button>
+                                        </div>
+                                    </div>
+                                    <div class="chart-area">
+                                        <div id="tradingview_widget" style="height:100%; width:100%;"></div>
+                                    </div>
+
+                                    <div class="charts-grid">
+                                        <div class="panel mini-chart">
+                                            <div class="mini-chart-title">📊 Volume Analysis</div>
+                                            <div class="mini-chart-content" id="volume-chart"></div>
+                                        </div>
+                                        <div class="panel mini-chart">
+                                            <div class="mini-chart-title">📈 RSI Indicator</div>
+                                            <div class="mini-chart-content" id="rsi-chart"></div>
+                                        </div>
+                                        <div class="panel mini-chart">
+                                            <div class="mini-chart-title">🔄 MACD</div>
+                                            <div class="mini-chart-content" id="macd-chart"></div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- TRADE PANEL -->
+                                <section id="trade-panel" class="panel sub-section">
+                                    <div class="main-trading-header">
+                                        <div>
+                                            <div class="panel-title">Trading Terminal</div>
+                                        </div>
+                                        <div class="panel-controls">
+                                            <div class="wallet-status disconnected" id="wallet-status">Connect Wallet
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Market Selection Cards -->
+                                    <div id="market-selection-view">
+                                        <div class="market-selection">
+                                            <div class="market-card" data-market="crypto">
+                                                <div class="market-icon">₿</div>
+                                                <div class="market-label">Cryptocurrency</div>
+                                                <div class="market-sublabel">Spot & Derivatives Trading</div>
+                                            </div>
+                                            <div class="market-card" data-market="forex">
+                                                <div class="market-icon">💱</div>
+                                                <div class="market-label">Forex Trading</div>
+                                                <div class="market-sublabel">Major Currency Pairs</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Crypto Trading Interface -->
+                                    <div class="trade-interface" id="crypto-interface">
+                                        <div class="bck-buy-sell-btn">
+                                            <button class="back-btn" id="back-to-selection">← Back</button>
+
+                                            <div class="trade-mode-toggle">
+                                                <button class="mode-btn active" data-mode="spot">Spot Trading</button>
+                                                <button class="mode-btn" data-mode="derivative">Derivatives</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="trading-grid">
+                                            <div class="trading-main">
+                                                <div class="side-buttons">
+                                                    <button class="side-btn buy active" data-side="buy">🟢 Buy /
+                                                        Long</button>
+                                                    <button class="side-btn sell" data-side="sell">🔴 Sell /
+                                                        Short</button>
+                                                </div>
+
+                                                <div class="order-controls" id="order-controls-spot">
+                                                    <div class="control-group order-type">
+                                                        <label class="control-label">Order Type</label>
+                                                        <select id="order-type">
+                                                            <option value="market">Market Order</option>
+                                                            <option value="limit">Limit Order</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label">Price (USDT)</label>
+                                                        <input id="order-price" class="input"
+                                                            placeholder="Market price" />
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label">Quantity (BTC)</label>
+                                                        <input id="order-qty" class="input" placeholder="0.01" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="order-controls" id="order-controls-derivative"
+                                                    style="display:none;">
+                                                    <div class="control-group order-type">
+                                                        <label class="control-label">Order Type</label>
+                                                        <select id="order-type-deriv">
+                                                            <option value="market">Market Order</option>
+                                                            <option value="limit">Limit Order</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label">Price (USDT)</label>
+                                                        <input id="order-price-deriv" class="input"
+                                                            placeholder="Market price" />
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label">Quantity (BTC)</label>
+                                                        <input id="order-qty-deriv" class="input" placeholder="0.01" />
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label">Leverage</label>
+                                                        <div class="leverage-control">
+                                                            <div class="leverage" id="leverage-buttons">
+                                                                <div class="leverage-btn active" data-lev="2">2x</div>
+                                                                <div class="leverage-btn" data-lev="5">5x</div>
+                                                                <div class="leverage-btn" data-lev="10">10x</div>
+                                                            </div>
+                                                            <select class="premium-leverage" id="leverage">
+                                                                <option value="">Premium</option>
+                                                                <option value="25" data-locked="true">25x 🔒</option>
+                                                                <option value="50" data-locked="true">50x 🔒</option>
+                                                                <option value="75" data-locked="true">75x 🔒</option>
+                                                                <option value="100" data-locked="true">100x 🔒</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tp-sl-section">
+                                                    <div class="control-group">
+                                                        <label class="control-label">Take Profit</label>
+                                                        <div class="tp-sl-row">
+                                                            <div class="tp-sl-mode">
+                                                                <button class="mode-toggle-btn active"
+                                                                    data-tp-mode="price">Price</button>
+                                                                <button class="mode-toggle-btn"
+                                                                    data-tp-mode="percent">%</button>
+                                                            </div>
+                                                            <input id="tp-value" class="input" style="flex:1;"
+                                                                placeholder="TP value" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="control-group">
+                                                        <label class="control-label">Stop Loss</label>
+                                                        <div class="tp-sl-row">
+                                                            <div class="tp-sl-mode">
+                                                                <button class="mode-toggle-btn active"
+                                                                    data-sl-mode="price">Price</button>
+                                                                <button class="mode-toggle-btn"
+                                                                    data-sl-mode="percent">%</button>
+                                                            </div>
+                                                            <input id="sl-value" class="input" style="flex:1;"
+                                                                placeholder="SL value" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="action-buttons">
+                                                    <button class="btn" id="place-order">Execute Order</button>
+                                                    <button class="btn ghost" id="save-template">💾 Save
+                                                        Template</button>
+                                                </div>
+                                            </div>
+
+                                            <div class="orderbook-container">
+                                                <div class="orderbook">
+                                                    <div class="ob-header">
+                                                        <span>Price (USDT)</span>
+                                                        <span>Amount</span>
+                                                        <span>Total</span>
+                                                    </div>
+                                                    <div id="ob-asks"></div>
+                                                    <div class="ob-spread">
+                                                        Spread: <strong id="spread">-</strong>
+                                                    </div>
+                                                    <div id="ob-bids"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Forex Trading Interface -->
+                                    <div class="trade-interface" id="forex-interface">
+                                        <button class="back-btn" id="back-to-selection-forex">← Back to Market
+                                            Selection</button>
+
+                                        <div class="side-buttons">
+                                            <button class="side-btn buy active" data-side="buy">🟢 Buy</button>
+                                            <button class="side-btn sell" data-side="sell">🔴 Sell</button>
+                                        </div>
+
+                                        <div class="order-controls">
+                                            <div class="control-group">
+                                                <label class="control-label">Currency Pair</label>
+                                                <select id="forex-pair">
+                                                    <option value="EURUSD">EUR/USD</option>
+                                                    <option value="GBPUSD">GBP/USD</option>
+                                                    <option value="USDJPY">USD/JPY</option>
+                                                    <option value="AUDUSD">AUD/USD</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="control-group">
+                                                <label class="control-label">Lot Size</label>
+                                                <input id="forex-lots" class="input" placeholder="0.01" />
+                                            </div>
+
+                                            <div class="control-group">
+                                                <label class="control-label">Take Profit (pips)</label>
+                                                <input id="forex-tp" class="input" placeholder="50 pips" />
+                                            </div>
+
+                                            <div class="control-group">
+                                                <label class="control-label">Stop Loss (pips)</label>
+                                                <input id="forex-sl" class="input" placeholder="30 pips" />
+                                            </div>
+                                        </div>
+
+                                        <div class="action-buttons">
+                                            <button class="btn" id="place-forex-order">Execute Forex Order</button>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- NEWS PANEL -->
+                                <section id="news-panel" class="panel sub-section">
+                                    <div class="panel-head">
+                                        <div>
+                                            <div class="panel-title">Market Intelligence</div>
+                                            <div class="panel-subtitle">Real-time news & updates</div>
+                                        </div>
+                                        <div>
+                                            <button class="btn ghost" id="refresh-news">🔄 Refresh</button>
+                                        </div>
+                                    </div>
+                                    <div class="news-list" id="news-list">
+                                        <div class="muted text-center">Loading latest headlines...</div>
+                                    </div>
+                                </section>
+
+                                <!-- CHAT PANEL -->
+                                <section id="chat-panel" class="panel sub-section">
+                                    <div class="chat-container">
+                                        <div class="chat-header-fixed">
+                                            <div class="panel-head"
+                                                style="margin-bottom: 0; padding-bottom: 0; border-bottom: none;">
+                                                <div>
+                                                    <div class="panel-title">Trading Room</div>
+                                                    <div class="panel-subtitle">EliteTraders Community</div>
+                                                </div>
+                                                <div class="panel-controls">
+                                                    <div class="status-badge">
+                                                        <span class="status-dot"></span>
+                                                        Live
+                                                    </div>
+                                                    <button class="expand-btn" data-target="chat-panel">⤢</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="messages" id="messages"></div>
+
+                                        <div class="emoji-picker" id="emoji-picker">
+                                            <div class="emoji-grid" id="emoji-grid"></div>
+                                        </div>
+
+                                        <div class="chat-input-wrapper">
+                                            <div class="chat-input">
+                                                <button class="chat-action-btn" id="emoji-btn">😊</button>
+                                                <input id="chat-input" placeholder="Share your trading insights..."
+                                                    autocomplete="off" />
+                                                <button class="chat-action-btn" id="upload-btn">📎</button>
+                                                <button class="send-btn" id="send-btn">Send</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                </section>
+
                 <!-- MOU Document Page -->
                 <section id="mouPage" class="page-section">
                     <div class="mou-container">
@@ -2065,7 +2424,7 @@
 
                         <h3>PARTY B (Trading Partners):</h3>
                         <ul>
-                            <li>Name: ADANU [Full Name] - Address: [Address] - <strong>CIO</strong></li>
+                            <li>Name: ADANU [Full Name] - Address: [Address] - <strong>LEAD TRADER</strong></li>
                             <li>Name: MANSUR [Full Name] - Address: [Address]</li>
                             <li>Name: MOHAMAD [Full Name] - Address: [Address]</li>
                             <li>Name: PAUL [Full Name] - Address: [Address]</li>
@@ -2119,7 +2478,7 @@
                             <li>Right to audit trading activities at any time</li>
                         </ul>
 
-                        <h3>3.2 CIO (ADANU) Responsibilities:</h3>
+                        <h3>3.2 Lead Trader (ADANU) Responsibilities:</h3>
                         <ul>
                             <li>Coordinate daily trading activities among all traders</li>
                             <li>Review and approve major trades before execution</li>
@@ -2161,7 +2520,7 @@
                         <h3>Profit Distribution Formula:</h3>
                         <ul>
                             <li>Party A (CEO): <strong>38%</strong> of monthly profits</li>
-                            <li>ADANU (CIO): <strong>12%</strong> of monthly profits</li>
+                            <li>ADANU (Lead Trader): <strong>12%</strong> of monthly profits</li>
                             <li>MANSUR (Trader): <strong>10%</strong> of monthly profits</li>
                             <li>MOHAMAD (Trader): <strong>10%</strong> of monthly profits</li>
                             <li>PAUL (Trader): <strong>10%</strong> of monthly profits</li>
@@ -2245,968 +2604,1563 @@
     <!-- =====================================================
          JAVASCRIPT - UNIFIED CODEBASE
          ===================================================== -->
-    <script type="module">
-        /* =====================================================
-           🔧 ADMIN CONFIGURATION - EDIT THESE VALUES
-           ===================================================== */
+         <script src="https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.umd.min.js"></script>
+    <!-- Team Collaboration -->
+    <script src="team-collaboration-client.js"></script>
 
-        const CONFIG = {
-            // Master PIN for dashboard access
-            MASTER_PIN: '123456',
+    <!-- Enhanced Emoji Picker -->
+    <script src="enhanced-emoji-picker.js"></script>
 
-            // Valid invitation codes
-            INVITATION_CODES: [
-                'SPROUT2024',
-                'TRADER2024',
-                'GOLD2024'
-            ],
+    <!-- Real Trading Charts -->
+    <script src="real-trading-charts.js"></script>
 
-            // Supabase Configuration
-            SUPABASE: {
-                URL: 'https://bocdwvrcgfiqkyylafvk.supabase.co',
-                ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvY2R3dnJjZ2ZpcWt5eWxhZnZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzMTg4NDksImV4cCI6MjA3ODg5NDg0OX0.DNB7E3z8uOxdZ598IBDWZLbH6nOnipPaMC4HpPS1O0s'
-            },
+    <!-- Real Orderbook System -->
+    <script src="real-orderbook.js"></script>
 
-            // EmailJS Configuration
-            EMAILJS: {
-                PUBLIC_KEY: '8eSavprsuiEKNq_pH',
-                SERVICE_ID: 'service_2xlt5e7',
-                TEMPLATE_ID: 'template_im9l5or'
-            }
-        };
+    <!-- Demo & Live Trading -->
+    <script src="demo-live-trading-system.js"></script>
+    <script src="web3_trading_engine.js"></script>
+    <script src="web3_integration.js"></script>
+    <script src="sproutslight-chart.js"></script>
 
-        /* =====================================================
-           📦 INITIALIZE SERVICES
-           ===================================================== */
+         <script src="tradex.js"></script>
 
-        const { createClient } = supabase;
+        <!-- ============================================================================
+     🎯 SPROUTLIGHT CAPITAL - UNIFIED AUTHENTICATION & TRADING SYSTEM
+     ============================================================================ -->
 
-        // Initialize Supabase
-        let db;
+<script type="module">
+    /* =========================================================================
+       📋 SECTION 1: CONFIGURATION
+       ========================================================================= */
+    
+    const CONFIG = {
+        // Authentication Settings
+        MASTER_PIN: '123456',
+        INVITATION_CODES: ['SPROUT2024', 'TRADER2024', 'GOLD2024'],
+        
+        // Database Configuration
+        SUPABASE: {
+            URL: 'https://bocdwvrcgfiqkyylafvk.supabase.co',
+            ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvY2R3dnJjZ2ZpcWt5eWxhZnZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzMTg4NDksImV4cCI6MjA3ODg5NDg0OX0.DNB7E3z8uOxdZ598IBDWZLbH6nOnipPaMC4HpPS1O0s'
+        },
+        
+        // Email Service Configuration
+        EMAILJS: {
+            PUBLIC_KEY: '8eSavprsuiEKNq_pH',
+            SERVICE_ID: 'service_2xlt5e7',
+            TEMPLATE_ID: 'template_im9l5or'
+        },
+        
+        // Trading Configuration
+        TRADING: {
+            WS_ORDERBOOK_URL: symbol => `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth@100ms`,
+            DEFAULT_SYMBOL: 'BTCUSDT',
+            DEFAULT_PIN: '1234',
+            BACKEND_URL: 'http://localhost:5000/api'
+        }
+    };
+
+    /* =========================================================================
+       📋 SECTION 2: SERVICE INITIALIZATION
+       ========================================================================= */
+    
+    const { createClient } = supabase;
+    let db;
+
+    // Initialize Supabase
+    try {
+        db = createClient(CONFIG.SUPABASE.URL, CONFIG.SUPABASE.ANON_KEY);
+        console.log('✅ Supabase connected');
+    } catch (error) {
+        console.error('❌ Supabase failed:', error);
+    }
+
+    // Initialize EmailJS
+    try {
+        emailjs.init(CONFIG.EMAILJS.PUBLIC_KEY);
+        console.log('✅ EmailJS initialized');
+    } catch (error) {
+        console.error('⚠️ EmailJS failed:', error);
+    }
+
+    /* =========================================================================
+       📋 SECTION 3: GLOBAL STATE
+       ========================================================================= */
+    
+    // Authentication State
+    let currentUser = null;
+    let verificationEmail = null;
+    let resetEmail = null;
+
+    // Trading State
+    let tvWidgetInstance = null;
+    let collabTvWidget = null;
+    let obSocket = null;
+    let currentMarket = null;
+    let currentSide = 'buy';
+    let currentMode = 'spot';
+    let currentLeverage = 2;
+    let tpMode = 'price';
+    let slMode = 'price';
+    let wallet = { connected: false, address: null, provider: null };
+    let highLeverageUnlocked = false;
+    let volumeChart = null;
+    let rsiChart = null;
+    let macdChart = null;
+
+    /* =========================================================================
+       📋 SECTION 4: UTILITY FUNCTIONS
+       ========================================================================= */
+    
+    const $ = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
+
+    function showLoading() {
+        $('#loadingSpinner')?.classList.add('active');
+    }
+
+    function hideLoading() {
+        $('#loadingSpinner')?.classList.remove('active');
+    }
+
+    window.showModal = function(title, message) {
+        $('#modalTitle').textContent = title;
+        $('#modalMessage').textContent = message;
+        $('#customModal').classList.add('active');
+    }
+
+    window.closeModal = function() {
+        $('#customModal').classList.remove('active');
+    }
+
+    function showError(elementId, message) {
+        const el = $(`#${elementId}`);
+        if (!el) return;
+        el.textContent = message;
+        el.style.display = 'block';
+        setTimeout(() => el.style.display = 'none', 5000);
+    }
+
+    function showSuccess(elementId, message) {
+        const el = $(`#${elementId}`);
+        if (!el) return;
+        el.textContent = message;
+        el.style.display = 'block';
+        setTimeout(() => el.style.display = 'none', 5000);
+    }
+
+    function hideAllAuthScreens() {
+        ['invitationScreen', 'signupScreen', 'signinScreen', 'emailVerificationScreen', 
+         'pinScreen', 'resetPasswordScreen', 'verifyResetCodeScreen', 'newPasswordScreen']
+        .forEach(id => $(`#${id}`)?.classList.add('hidden'));
+    }
+
+    function generateCode() {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    async function hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hash))
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join('');
+    }
+
+    window.togglePassword = function(fieldId) {
+        const field = $(`#${fieldId}`);
+        const button = field?.nextElementSibling;
+        if (!field || !button) return;
+        
+        if (field.type === 'password') {
+            field.type = 'text';
+            button.textContent = '🙈';
+        } else {
+            field.type = 'password';
+            button.textContent = '👁️';
+        }
+    }
+
+    /* =========================================================================
+       📋 SECTION 5: EMAIL SERVICES
+       ========================================================================= */
+    
+    async function sendVerificationEmail(email, code) {
         try {
-            db = createClient(CONFIG.SUPABASE.URL, CONFIG.SUPABASE.ANON_KEY);
-            console.log('✅ Supabase connected successfully');
-        } catch (error) {
-            console.error('❌ Supabase connection failed:', error);
-            showModal('Database Error', 'Failed to connect to database. Please contact support.');
-        }
+            const templateParams = {
+                user_email: email,
+                to_email: email,
+                recipient_email: email,
+                to_name: email.split('@')[0],
+                verification_code: code,
+                code: code,
+                message: `Your SproutLight Capital verification code is: ${code}`
+            };
 
-        // Initialize EmailJS
+            const response = await emailjs.send(
+                CONFIG.EMAILJS.SERVICE_ID,
+                CONFIG.EMAILJS.TEMPLATE_ID,
+                templateParams
+            );
+            console.log('✅ Email sent!', response);
+            return true;
+        } catch (error) {
+            console.error('❌ Email failed:', error);
+            return false;
+        }
+    }
+
+    async function sendResetEmail(email, code) {
         try {
-            emailjs.init(CONFIG.EMAILJS.PUBLIC_KEY);
-            console.log('✅ EmailJS initialized successfully');
+            const templateParams = {
+                user_email: email,
+                to_email: email,
+                recipient_email: email,
+                to_name: email.split('@')[0],
+                verification_code: code,
+                code: code,
+                message: `Your password reset code is: ${code}`
+            };
+
+            const response = await emailjs.send(
+                CONFIG.EMAILJS.SERVICE_ID,
+                CONFIG.EMAILJS.TEMPLATE_ID,
+                templateParams
+            );
+            console.log('✅ Reset email sent!', response);
+            return true;
         } catch (error) {
-            console.error('⚠️ EmailJS initialization failed:', error);
+            console.error('❌ Email failed:', error);
+            return false;
+        }
+    }
+
+    /* =========================================================================
+       📋 SECTION 6: AUTHENTICATION HANDLERS
+       ========================================================================= */
+    
+    // 6.1 - Invitation Code
+    $('#invitationForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const code = $('#inviteCode')?.value.trim().toUpperCase();
+        
+        if (CONFIG.INVITATION_CODES.includes(code)) {
+            hideAllAuthScreens();
+            $('#signupScreen')?.classList.remove('hidden');
+        } else {
+            showError('inviteError', 'Invalid invitation code');
+        }
+    });
+
+    // 6.2 - Sign Up
+    $('#signupForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = $('#signupName')?.value.trim();
+        const email = $('#signupEmail')?.value.trim().toLowerCase();
+        const password = $('#signupPassword')?.value;
+        const pin = $('#signupPin')?.value;
+
+        if (password.length < 8) {
+            showError('signupError', 'Password must be at least 8 characters');
+            return;
         }
 
-        /* =====================================================
-           💾 STATE MANAGEMENT
-           ===================================================== */
-
-        let currentUser = null;
-        let verificationEmail = null;
-        let resetEmail = null;
-
-        /* =====================================================
-           🛠️ UTILITY FUNCTIONS
-           ===================================================== */
-
-        // Show loading spinner
-        function showLoading() {
-            document.getElementById('loadingSpinner').classList.add('active');
+        if (pin.length !== 6 || isNaN(pin)) {
+            showError('signupError', 'PIN must be 6 digits');
+            return;
         }
 
-        // Hide loading spinner
-        function hideLoading() {
-            document.getElementById('loadingSpinner').classList.remove('active');
-        }
+        showLoading();
 
-        // Show custom modal
-        window.showModal = function (title, message) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalMessage').textContent = message;
-            document.getElementById('customModal').classList.add('active');
-        }
+        try {
+            const { data: existing } = await db.from('users').select('email').eq('email', email).single();
+            
+            if (existing) {
+                hideLoading();
+                showError('signupError', 'Email already registered');
+                return;
+            }
 
-        // Close modal
-        window.closeModal = function () {
-            document.getElementById('customModal').classList.remove('active');
-        }
+            const hashedPassword = await hashPassword(password);
+            const hashedPin = await hashPassword(pin);
 
-        // Show error message
-        function showError(elementId, message) {
-            const errorElement = document.getElementById(elementId);
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
+            const { error } = await db.from('users').insert([{
+                name, email,
+                password: hashedPassword,
+                pin: hashedPin,
+                email_verified: false,
+                created_at: new Date().toISOString()
+            }]);
+
+            if (error) throw error;
+
+            hideLoading();
+            showSuccess('signupSuccess', 'Account created! Redirecting...');
+
             setTimeout(() => {
-                errorElement.style.display = 'none';
-            }, 5000);
-        }
-
-        // Show success message
-        function showSuccess(elementId, message) {
-            const successElement = document.getElementById(elementId);
-            successElement.textContent = message;
-            successElement.style.display = 'block';
-            setTimeout(() => {
-                successElement.style.display = 'none';
-            }, 5000);
-        }
-
-        // Hide all auth screens
-        function hideAllAuthScreens() {
-            document.getElementById('invitationScreen').classList.add('hidden');
-            document.getElementById('signupScreen').classList.add('hidden');
-            document.getElementById('signinScreen').classList.add('hidden');
-            document.getElementById('emailVerificationScreen').classList.add('hidden');
-            document.getElementById('pinScreen').classList.add('hidden');
-            document.getElementById('resetPasswordScreen').classList.add('hidden');
-            document.getElementById('verifyResetCodeScreen').classList.add('hidden');
-            document.getElementById('newPasswordScreen').classList.add('hidden');
-        }
-
-        // Generate random 6-digit code
-        function generateCode() {
-            return Math.floor(100000 + Math.random() * 900000).toString();
-        }
-
-        // Hash password (simple hash for demo - use bcrypt in production backend)
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hash = await crypto.subtle.digest('SHA-256', data);
-            return Array.from(new Uint8Array(hash))
-                .map(b => b.toString(16).padStart(2, '0'))
-                .join('');
-        }
-
-        // Toggle password visibility
-        window.togglePassword = function (fieldId) {
-            const field = document.getElementById(fieldId);
-            const button = field.nextElementSibling;
-
-            if (field.type === 'password') {
-                field.type = 'text';
-                button.textContent = '🙈';
-            } else {
-                field.type = 'password';
-                button.textContent = '👁️';
-            }
-        }
-
-        /* =====================================================
-           📧 EMAIL SERVICE FUNCTIONS
-           ===================================================== */
-        async function sendVerificationEmail(email, code) {
-            try {
-                const templateParams = {
-                    user_email: email,      // For the "To" field
-                    to_email: email,        // Backup parameter
-                    recipient_email: email, // Another backup
-                    to_name: email.split('@')[0],
-                    verification_code: code,
-                    code: code,
-                    message: `Your SproutLight Capital verification code is: ${code}`
-                };
-
-                console.log('📧 Sending email with params:', templateParams);
-
-                const response = await emailjs.send(
-                    CONFIG.EMAILJS.SERVICE_ID,
-                    CONFIG.EMAILJS.TEMPLATE_ID,
-                    templateParams
-                );
-
-                console.log('✅ Email sent successfully!', response);
-                return true;
-            } catch (error) {
-                console.error('❌ Email sending failed:', error);
-                console.error('Error text:', error.text);
-                return false;
-            }
-        }
-
-        async function sendResetEmail(email, code) {
-            try {
-                const templateParams = {
-                    user_email: email,      // For the "To" field
-                    to_email: email,        // Backup parameter
-                    recipient_email: email, // Another backup
-                    to_name: email.split('@')[0],
-                    verification_code: code,
-                    code: code,
-                    message: `Your password reset code is: ${code}`
-                };
-
-                console.log('📧 Sending reset email with params:', templateParams);
-
-                const response = await emailjs.send(
-                    CONFIG.EMAILJS.SERVICE_ID,
-                    CONFIG.EMAILJS.TEMPLATE_ID,
-                    templateParams
-                );
-
-                console.log('✅ Reset email sent successfully!', response);
-                return true;
-            } catch (error) {
-                console.error('❌ Email sending failed:', error);
-                console.error('Error text:', error.text);
-                return false;
-            }
-        }
-
-        /* =====================================================
-           🔐 AUTHENTICATION FUNCTIONS
-           ===================================================== */
-
-        // 1. INVITATION CODE VERIFICATION
-        document.getElementById('invitationForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const inviteCode = document.getElementById('inviteCode').value.trim().toUpperCase();
-
-            if (CONFIG.INVITATION_CODES.includes(inviteCode)) {
                 hideAllAuthScreens();
-                document.getElementById('signupScreen').classList.remove('hidden');
-            } else {
-                showError('inviteError', 'Invalid invitation code. Please contact administrator.');
-            }
-        });
+                $('#signinScreen')?.classList.remove('hidden');
+                if ($('#signinEmail')) $('#signinEmail').value = email;
+            }, 2000);
 
-        // 2. SIGN UP
-        document.getElementById('signupForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        } catch (error) {
+            hideLoading();
+            console.error('Signup error:', error);
+            showError('signupError', 'Registration failed');
+        }
+    });
 
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
-            const password = document.getElementById('signupPassword').value;
-            const pin = document.getElementById('signupPin').value;
+    // 6.3 - Sign In
+    $('#signinForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = $('#signinEmail')?.value.trim().toLowerCase();
+        const password = $('#signinPassword')?.value;
 
-            // Validation
-            if (password.length < 8) {
-                showError('signupError', 'Password must be at least 8 characters long.');
+        showLoading();
+
+        try {
+            const { data: user, error } = await db.from('users').select('*').eq('email', email).single();
+
+            if (error || !user) {
+                hideLoading();
+                showError('signinError', 'Email not found');
                 return;
             }
 
-            if (pin.length !== 6 || isNaN(pin)) {
-                showError('signupError', 'PIN must be exactly 6 digits.');
+            const hashedPassword = await hashPassword(password);
+            if (user.password !== hashedPassword) {
+                hideLoading();
+                showError('signinError', 'Incorrect password');
                 return;
             }
 
-            showLoading();
+            currentUser = user;
 
-            try {
-                // Check if user already exists
-                const { data: existingUser } = await db
-                    .from('users')
-                    .select('email')
-                    .eq('email', email)
-                    .single();
-
-                if (existingUser) {
-                    hideLoading();
-                    showError('signupError', 'Email already registered. Please sign in instead.');
-                    return;
-                }
-
-                // Hash password and PIN
-                const hashedPassword = await hashPassword(password);
-                const hashedPin = await hashPassword(pin);
-
-                // Insert new user
-                const { error } = await db
-                    .from('users')
-                    .insert([{
-                        name: name,
-                        email: email,
-                        password: hashedPassword,
-                        pin: hashedPin,
-                        email_verified: false,
-                        created_at: new Date().toISOString()
-                    }]);
-
-                if (error) throw error;
-
-                hideLoading();
-                showSuccess('signupSuccess', 'Account created successfully! Redirecting to sign in...');
-
-                setTimeout(() => {
-                    hideAllAuthScreens();
-                    document.getElementById('signinScreen').classList.remove('hidden');
-                    document.getElementById('signinEmail').value = email;
-                }, 2000);
-
-            } catch (error) {
-                hideLoading();
-                console.error('Signup error:', error);
-                showError('signupError', 'Registration failed. Please try again.');
-            }
-        });
-
-        // 3. SIGN IN
-        document.getElementById('signinForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const email = document.getElementById('signinEmail').value.trim().toLowerCase();
-            const password = document.getElementById('signinPassword').value;
-
-            showLoading();
-
-            try {
-                // Get user from database
-                const { data: user, error } = await db
-                    .from('users')
-                    .select('*')
-                    .eq('email', email)
-                    .single();
-
-                if (error || !user) {
-                    hideLoading();
-                    showError('signinError', 'Email not found. Please sign up first.');
-                    return;
-                }
-
-                // Verify password
-                const hashedPassword = await hashPassword(password);
-                if (user.password !== hashedPassword) {
-                    hideLoading();
-                    showError('signinError', 'Incorrect password. Please try again.');
-                    return;
-                }
-
-                currentUser = user;
-
-                // Check if email is verified
-                if (!user.email_verified) {
-                    // Generate and store verification code
-                    const code = generateCode();
-
-                    const { error: updateError } = await db
-                        .from('users')
-                        .update({ verification_code: code })
-                        .eq('email', email);
-
-                    if (updateError) throw updateError;
-
-                    // Send verification email
-                    await sendVerificationEmail(email, code);
-
-                    hideLoading();
-                    verificationEmail = email;
-                    hideAllAuthScreens();
-                    document.getElementById('emailVerificationScreen').classList.remove('hidden');
-                    document.getElementById('verifyEmailDisplay').textContent = email;
-                    showSuccess('emailVerifySuccess', 'Verification code sent to your email!');
-                } else {
-                    // Email verified, go to PIN
-                    hideLoading();
-                    hideAllAuthScreens();
-                    document.getElementById('pinScreen').classList.remove('hidden');
-                }
-
-            } catch (error) {
-                hideLoading();
-                console.error('Signin error:', error);
-                showError('signinError', 'Login failed. Please try again.');
-            }
-        });
-
-        // 4. EMAIL VERIFICATION
-        document.getElementById('emailVerificationForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const code = document.getElementById('emailVerifyCode').value.trim();
-
-            if (!verificationEmail) {
-                showError('emailVerifyError', 'Session expired. Please sign in again.');
-                return;
-            }
-
-            showLoading();
-
-            try {
-                // Get user and verify code
-                const { data: user, error } = await db
-                    .from('users')
-                    .select('*')
-                    .eq('email', verificationEmail)
-                    .single();
-
-                if (error || !user) {
-                    hideLoading();
-                    showError('emailVerifyError', 'User not found. Please sign in again.');
-                    return;
-                }
-
-                if (user.verification_code !== code) {
-                    hideLoading();
-                    showError('emailVerifyError', 'Invalid verification code. Please try again.');
-                    document.getElementById('emailVerifyCode').value = '';
-                    return;
-                }
-
-                // Update user as verified
-                const { error: updateError } = await db
-                    .from('users')
-                    .update({
-                        email_verified: true,
-                        verification_code: null
-                    })
-                    .eq('email', verificationEmail);
-
-                if (updateError) throw updateError;
-
-                currentUser = { ...user, email_verified: true };
-
-                hideLoading();
-                showSuccess('emailVerifySuccess', 'Email verified successfully!');
-
-                setTimeout(() => {
-                    hideAllAuthScreens();
-                    document.getElementById('pinScreen').classList.remove('hidden');
-                }, 1000);
-
-            } catch (error) {
-                hideLoading();
-                console.error('Email verification error:', error);
-                showError('emailVerifyError', 'Verification failed. Please try again.');
-            }
-        });
-
-        // Resend email verification code
-        document.getElementById('resendEmailCode').addEventListener('click', async (e) => {
-            e.preventDefault();
-
-            if (!verificationEmail) {
-                showError('emailVerifyError', 'Session expired. Please sign in again.');
-                return;
-            }
-
-            showLoading();
-
-            try {
+            if (!user.email_verified) {
                 const code = generateCode();
-
-                const { error } = await db
-                    .from('users')
-                    .update({ verification_code: code })
-                    .eq('email', verificationEmail);
-
-                if (error) throw error;
-
-                await sendVerificationEmail(verificationEmail, code);
-
+                await db.from('users').update({ verification_code: code }).eq('email', email);
+                await sendVerificationEmail(email, code);
+                
                 hideLoading();
-                showSuccess('emailVerifySuccess', 'New verification code sent to your email!');
-
-            } catch (error) {
+                verificationEmail = email;
+                hideAllAuthScreens();
+                $('#emailVerificationScreen')?.classList.remove('hidden');
+                if ($('#verifyEmailDisplay')) $('#verifyEmailDisplay').textContent = email;
+                showSuccess('emailVerifySuccess', 'Verification code sent!');
+            } else {
                 hideLoading();
-                console.error('Resend code error:', error);
-                showError('emailVerifyError', 'Failed to resend code. Please try again.');
+                hideAllAuthScreens();
+                $('#pinScreen')?.classList.remove('hidden');
             }
-        });
 
-        // 5. PIN VERIFICATION
-        document.getElementById('pinForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        } catch (error) {
+            hideLoading();
+            console.error('Signin error:', error);
+            showError('signinError', 'Login failed');
+        }
+    });
 
-            const pin = document.getElementById('pinCode').value;
+    // 6.4 - Email Verification
+    $('#emailVerificationForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const code = $('#emailVerifyCode')?.value.trim();
 
-            if (!currentUser) {
-                showError('pinError', 'Session expired. Please sign in again.');
+        if (!verificationEmail) {
+            showError('emailVerifyError', 'Session expired');
+            return;
+        }
+
+        showLoading();
+
+        try {
+            const { data: user, error } = await db.from('users').select('*').eq('email', verificationEmail).single();
+
+            if (error || !user) {
+                hideLoading();
+                showError('emailVerifyError', 'User not found');
                 return;
             }
 
-            showLoading();
-
-            try {
-                const hashedPin = await hashPassword(pin);
-
-                if (currentUser.pin !== hashedPin) {
-                    hideLoading();
-                    showError('pinError', 'Incorrect PIN. Please try again.');
-                    document.getElementById('pinCode').value = '';
-                    return;
-                }
-
+            if (user.verification_code !== code) {
                 hideLoading();
+                showError('emailVerifyError', 'Invalid code');
+                if ($('#emailVerifyCode')) $('#emailVerifyCode').value = '';
+                return;
+            }
+
+            await db.from('users').update({ email_verified: true, verification_code: null }).eq('email', verificationEmail);
+            currentUser = { ...user, email_verified: true };
+
+            hideLoading();
+            showSuccess('emailVerifySuccess', 'Email verified!');
+
+            setTimeout(() => {
                 hideAllAuthScreens();
-                document.getElementById('dashboard').style.display = 'block';
+                $('#pinScreen')?.classList.remove('hidden');
+            }, 1000);
+
+        } catch (error) {
+            hideLoading();
+            console.error('Verification error:', error);
+            showError('emailVerifyError', 'Verification failed');
+        }
+    });
+
+    // 6.5 - Resend Email Code
+    $('#resendEmailCode')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        
+        if (!verificationEmail) {
+            showError('emailVerifyError', 'Session expired');
+            return;
+        }
+
+        showLoading();
+
+        try {
+            const code = generateCode();
+            await db.from('users').update({ verification_code: code }).eq('email', verificationEmail);
+            await sendVerificationEmail(verificationEmail, code);
+            
+            hideLoading();
+            showSuccess('emailVerifySuccess', 'New code sent!');
+        } catch (error) {
+            hideLoading();
+            showError('emailVerifyError', 'Failed to resend');
+        }
+    });
+
+    // 6.6 - PIN Verification
+    $('#pinForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const pin = $('#pinCode')?.value;
+
+        if (!currentUser) {
+            showError('pinError', 'Session expired');
+            return;
+        }
+
+        showLoading();
+
+        try {
+            const hashedPin = await hashPassword(pin);
+
+            if (currentUser.pin !== hashedPin) {
+                hideLoading();
+                showError('pinError', 'Incorrect PIN');
+                if ($('#pinCode')) $('#pinCode').value = '';
+                return;
+            }
+
+            hideLoading();
+            hideAllAuthScreens();
+            const dashboard = $('#dashboard');
+            if (dashboard) {
+                dashboard.style.display = 'block';
                 showModal('Welcome!', `Welcome back, ${currentUser.name}!`);
-
-            } catch (error) {
-                hideLoading();
-                console.error('PIN verification error:', error);
-                showError('pinError', 'Verification failed. Please try again.');
+                
+                // ✅ INITIALIZE TRADING INTERFACE AFTER SUCCESSFUL LOGIN
+                setTimeout(() => initTradingInterface(), 500);
             }
-        });
 
-        // 6. PASSWORD RESET - Send Code
-        document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        } catch (error) {
+            hideLoading();
+            console.error('PIN error:', error);
+            showError('pinError', 'Verification failed');
+        }
+    });
 
-            const email = document.getElementById('resetEmail').value.trim().toLowerCase();
+    // 6.7 - Password Reset Flow
+    $('#resetPasswordForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = $('#resetEmail')?.value.trim().toLowerCase();
+        showLoading();
 
-            showLoading();
+        try {
+            const { data: user, error } = await db.from('users').select('email').eq('email', email).single();
 
-            try {
-                // Check if user exists
-                const { data: user, error } = await db
-                    .from('users')
-                    .select('email')
-                    .eq('email', email)
-                    .single();
-
-                if (error || !user) {
-                    hideLoading();
-                    showError('resetError', 'Email not found in our system.');
-                    return;
-                }
-
-                // Generate and store reset code
-                const code = generateCode();
-
-                const { error: updateError } = await db
-                    .from('users')
-                    .update({ reset_code: code })
-                    .eq('email', email);
-
-                if (updateError) throw updateError;
-
-                // Send reset email
-                await sendResetEmail(email, code);
-
-                resetEmail = email;
-
+            if (error || !user) {
                 hideLoading();
-                showSuccess('resetSuccess', 'Reset code sent to your email!');
-
-                setTimeout(() => {
-                    hideAllAuthScreens();
-                    document.getElementById('verifyResetCodeScreen').classList.remove('hidden');
-                }, 2000);
-
-            } catch (error) {
-                hideLoading();
-                console.error('Password reset error:', error);
-                showError('resetError', 'Failed to send reset code. Please try again.');
-            }
-        });
-
-        // 7. PASSWORD RESET - Verify Code
-        document.getElementById('verifyResetCodeForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const code = document.getElementById('resetVerifyCode').value.trim();
-
-            if (!resetEmail) {
-                showError('verifyResetError', 'Session expired. Please start again.');
+                showError('resetError', 'Email not found');
                 return;
             }
 
-            showLoading();
+            const code = generateCode();
+            await db.from('users').update({ reset_code: code }).eq('email', email);
+            await sendResetEmail(email, code);
+            
+            resetEmail = email;
+            hideLoading();
+            showSuccess('resetSuccess', 'Reset code sent!');
 
-            try {
-                const { data: user, error } = await db
-                    .from('users')
-                    .select('reset_code')
-                    .eq('email', resetEmail)
-                    .single();
+            setTimeout(() => {
+                hideAllAuthScreens();
+                $('#verifyResetCodeScreen')?.classList.remove('hidden');
+            }, 2000);
 
-                if (error || !user) {
-                    hideLoading();
-                    showError('verifyResetError', 'User not found. Please try again.');
-                    return;
-                }
+        } catch (error) {
+            hideLoading();
+            showError('resetError', 'Failed to send code');
+        }
+    });
 
-                if (user.reset_code !== code) {
-                    hideLoading();
-                    showError('verifyResetError', 'Invalid reset code. Please try again.');
-                    document.getElementById('resetVerifyCode').value = '';
-                    return;
-                }
+    $('#verifyResetCodeForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const code = $('#resetVerifyCode')?.value.trim();
 
+        if (!resetEmail) {
+            showError('verifyResetError', 'Session expired');
+            return;
+        }
+
+        showLoading();
+
+        try {
+            const { data: user } = await db.from('users').select('reset_code').eq('email', resetEmail).single();
+
+            if (user.reset_code !== code) {
                 hideLoading();
-                showSuccess('verifyResetSuccess', 'Code verified! Create new password.');
-
-                setTimeout(() => {
-                    hideAllAuthScreens();
-                    document.getElementById('newPasswordScreen').classList.remove('hidden');
-                }, 1000);
-
-            } catch (error) {
-                hideLoading();
-                console.error('Code verification error:', error);
-                showError('verifyResetError', 'Verification failed. Please try again.');
-            }
-        });
-
-        // Resend reset code
-        document.getElementById('resendResetCode').addEventListener('click', async (e) => {
-            e.preventDefault();
-
-            if (!resetEmail) {
-                showError('verifyResetError', 'Session expired. Please start again.');
+                showError('verifyResetError', 'Invalid code');
+                if ($('#resetVerifyCode')) $('#resetVerifyCode').value = '';
                 return;
             }
 
-            showLoading();
+            hideLoading();
+            showSuccess('verifyResetSuccess', 'Code verified!');
 
-            try {
-                const code = generateCode();
+            setTimeout(() => {
+                hideAllAuthScreens();
+                $('#newPasswordScreen')?.classList.remove('hidden');
+            }, 1000);
 
-                const { error } = await db
-                    .from('users')
-                    .update({ reset_code: code })
-                    .eq('email', resetEmail);
+        } catch (error) {
+            hideLoading();
+            showError('verifyResetError', 'Verification failed');
+        }
+    });
 
-                if (error) throw error;
+    $('#resendResetCode')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        if (!resetEmail) return;
 
-                await sendResetEmail(resetEmail, code);
+        showLoading();
+        try {
+            const code = generateCode();
+            await db.from('users').update({ reset_code: code }).eq('email', resetEmail);
+            await sendResetEmail(resetEmail, code);
+            hideLoading();
+            showSuccess('verifyResetSuccess', 'New code sent!');
+        } catch (error) {
+            hideLoading();
+            showError('verifyResetError', 'Failed to resend');
+        }
+    });
 
-                hideLoading();
-                showSuccess('verifyResetSuccess', 'New reset code sent to your email!');
+    $('#newPasswordForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const newPassword = $('#newPassword')?.value;
+        const confirmPassword = $('#confirmPassword')?.value;
 
-            } catch (error) {
-                hideLoading();
-                console.error('Resend reset code error:', error);
-                showError('verifyResetError', 'Failed to resend code. Please try again.');
-            }
-        });
+        if (newPassword.length < 8) {
+            showError('newPasswordError', 'Password must be at least 8 characters');
+            return;
+        }
 
-        // 8. PASSWORD RESET - Set New Password
-        document.getElementById('newPasswordForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        if (newPassword !== confirmPassword) {
+            showError('newPasswordError', 'Passwords do not match');
+            return;
+        }
 
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+        showLoading();
 
-            if (newPassword.length < 8) {
-                showError('newPasswordError', 'Password must be at least 8 characters long.');
-                return;
-            }
+        try {
+            const hashedPassword = await hashPassword(newPassword);
+            await db.from('users').update({ password: hashedPassword, reset_code: null }).eq('email', resetEmail);
 
-            if (newPassword !== confirmPassword) {
-                showError('newPasswordError', 'Passwords do not match.');
-                return;
-            }
+            hideLoading();
+            showSuccess('newPasswordSuccess', 'Password reset successful!');
 
-            if (!resetEmail) {
-                showError('newPasswordError', 'Session expired. Please try again.');
-                return;
-            }
-
-            showLoading();
-
-            try {
-                const hashedPassword = await hashPassword(newPassword);
-
-                const { error } = await db
-                    .from('users')
-                    .update({
-                        password: hashedPassword,
-                        reset_code: null
-                    })
-                    .eq('email', resetEmail);
-
-                if (error) throw error;
-
-                hideLoading();
-                showSuccess('newPasswordSuccess', 'Password reset successful! Redirecting...');
-
-                setTimeout(() => {
-                    resetEmail = null;
-                    hideAllAuthScreens();
-                    document.getElementById('signinScreen').classList.remove('hidden');
-                }, 2000);
-
-            } catch (error) {
-                hideLoading();
-                console.error('Password update error:', error);
-                showError('newPasswordError', 'Password reset failed. Please try again.');
-            }
-        });
-
-        /* =====================================================
-           🔄 NAVIGATION BETWEEN AUTH SCREENS
-           ===================================================== */
-
-        document.getElementById('goToLogin').addEventListener('click', (e) => {
-            e.preventDefault();
-            hideAllAuthScreens();
-            document.getElementById('signinScreen').classList.remove('hidden');
-        });
-
-        document.getElementById('goToSignup').addEventListener('click', (e) => {
-            e.preventDefault();
-            hideAllAuthScreens();
-            document.getElementById('signupScreen').classList.remove('hidden');
-        });
-
-        document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
-            e.preventDefault();
-            hideAllAuthScreens();
-            document.getElementById('resetPasswordScreen').classList.remove('hidden');
-        });
-
-        document.getElementById('backToLogin').addEventListener('click', (e) => {
-            e.preventDefault();
-            hideAllAuthScreens();
-            document.getElementById('signinScreen').classList.remove('hidden');
-        });
-
-        /* =====================================================
-           🎨 DASHBOARD FUNCTIONALITY
-           ===================================================== */
-
-        // Theme Toggle
-        document.getElementById('themeToggle').addEventListener('click', function () {
-            document.body.classList.toggle('light-theme');
-
-            if (document.body.classList.contains('light-theme')) {
-                this.textContent = '☀️ Light';
-                document.getElementById('mobileThemeToggle').textContent = '☀️ Light Mode';
-            } else {
-                this.textContent = '🌙 Dark';
-                document.getElementById('mobileThemeToggle').textContent = '🌙 Dark Mode';
-            }
-        });
-
-        document.getElementById('mobileThemeToggle').addEventListener('click', function () {
-            document.body.classList.toggle('light-theme');
-
-            if (document.body.classList.contains('light-theme')) {
-                this.textContent = '☀️ Light Mode';
-                document.getElementById('themeToggle').textContent = '☀️ Light';
-            } else {
-                this.textContent = '🌙 Dark Mode';
-                document.getElementById('themeToggle').textContent = '🌙 Dark';
-            }
-        });
-
-        // Mobile Menu
-        document.getElementById('mobileMenuToggle').addEventListener('click', () => {
-            document.getElementById('mobileMenu').classList.add('active');
-        });
-
-        document.getElementById('mobileMenuClose').addEventListener('click', () => {
-            document.getElementById('mobileMenu').classList.remove('active');
-        });
-
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            if (confirm('Are you sure you want to logout?')) {
-                currentUser = null;
-                verificationEmail = null;
+            setTimeout(() => {
                 resetEmail = null;
-                document.getElementById('dashboard').style.display = 'none';
-                document.getElementById('invitationScreen').classList.remove('hidden');
+                hideAllAuthScreens();
+                $('#signinScreen')?.classList.remove('hidden');
+            }, 2000);
 
-                // Clear all forms
-                document.querySelectorAll('input').forEach(input => input.value = '');
+        } catch (error) {
+            hideLoading();
+            showError('newPasswordError', 'Reset failed');
+        }
+    });
+
+    /* =========================================================================
+       📋 SECTION 7: AUTH NAVIGATION
+       ========================================================================= */
+    
+    $('#goToLogin')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        hideAllAuthScreens();
+        $('#signinScreen')?.classList.remove('hidden');
+    });
+
+    $('#goToSignup')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        hideAllAuthScreens();
+        $('#signupScreen')?.classList.remove('hidden');
+    });
+
+    $('#forgotPasswordLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        hideAllAuthScreens();
+        $('#resetPasswordScreen')?.classList.remove('hidden');
+    });
+
+    $('#backToLogin')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        hideAllAuthScreens();
+        $('#signinScreen')?.classList.remove('hidden');
+    });
+
+    /* =========================================================================
+       📋 SECTION 8: DASHBOARD CONTROLS
+       ========================================================================= */
+    
+    // Theme Toggle
+    $('#themeToggle')?.addEventListener('click', function() {
+        document.body.classList.toggle('light-theme');
+        const isLight = document.body.classList.contains('light-theme');
+        this.textContent = isLight ? '☀️ Light' : '🌙 Dark';
+        if ($('#mobileThemeToggle')) {
+            $('#mobileThemeToggle').textContent = isLight ? '☀️ Light Mode' : '🌙 Dark Mode';
+        }
+    });
+
+    $('#mobileThemeToggle')?.addEventListener('click', function() {
+        document.body.classList.toggle('light-theme');
+        const isLight = document.body.classList.contains('light-theme');
+        this.textContent = isLight ? '☀️ Light Mode' : '🌙 Dark Mode';
+        if ($('#themeToggle')) {
+            $('#themeToggle').textContent = isLight ? '☀️ Light' : '🌙 Dark';
+        }
+    });
+
+    // Mobile Menu
+    $('#mobileMenuToggle')?.addEventListener('click', () => {
+        $('#mobileMenu')?.classList.add('active');
+    });
+
+    $('#mobileMenuClose')?.addEventListener('click', () => {
+        $('#mobileMenu')?.classList.remove('active');
+    });
+
+    // Logout
+    function handleLogout() {
+        if (confirm('Are you sure you want to logout?')) {
+            currentUser = null;
+            verificationEmail = null;
+            resetEmail = null;
+            
+            const dashboard = $('#dashboard');
+            if (dashboard) dashboard.style.display = 'none';
+            
+            $('#mobileMenu')?.classList.remove('active');
+            $('#invitationScreen')?.classList.remove('hidden');
+            
+            $$('input').forEach(input => input.value = '');
+        }
+    }
+
+    $('#logoutBtn')?.addEventListener('click', handleLogout);
+    $('#mobileLogoutBtn')?.addEventListener('click', handleLogout);
+
+    // Navigation
+    const allMenuItems = $$('.nav-item');
+    const pages = $$('.page-section');
+
+    allMenuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            allMenuItems.forEach(mi => mi.classList.remove('active'));
+            this.classList.add('active');
+
+            const pageToShow = this.getAttribute('data-page');
+            allMenuItems.forEach(mi => {
+                if (mi.getAttribute('data-page') === pageToShow) {
+                    mi.classList.add('active');
+                }
+            });
+
+            pages.forEach(page => page.classList.remove('active'));
+
+            if (pageToShow === 'tradex') {
+                $('#tradexPage')?.classList.add('active');
+            } else if (pageToShow === 'analytics') {
+                $('#analyticsPage')?.classList.add('active');
+            } else if (pageToShow === 'mou') {
+                $('#mouPage')?.classList.add('active');
             }
+
+            $('#mobileMenu')?.classList.remove('active');
         });
+    });
 
-        document.getElementById('mobileLogoutBtn').addEventListener('click', () => {
-            if (confirm('Are you sure you want to logout?')) {
-                currentUser = null;
-                verificationEmail = null;
-                resetEmail = null;
-                document.getElementById('dashboard').style.display = 'none';
-                document.getElementById('mobileMenu').classList.remove('active');
-                document.getElementById('invitationScreen').classList.remove('hidden');
+    /* =========================================================================
+       📋 SECTION 9: TRADEX INTERFACE INITIALIZATION
+       ========================================================================= */
+    
+    function initTradingInterface() {
+        console.log('🚀 Initializing TradeX Interface...');
+        
+        // Initialize particles
+        createParticles();
+        
+        // Initialize navigation
+        initTradeNav();
+        
+        // Initialize TradingView chart
+        createTradingView();
+        
+        // Initialize lightweight charts
+        initLightweightCharts();
+        
+        // Initialize market selection
+        initMarketSelection();
+        
+        // Initialize trading controls
+        initTradingMode();
+        initSideButtons();
+        initLeverageControl();
+        initTPSLModeToggles();
+        
+        // Initialize chat
+        initChat();
+        
+        // Initialize news
+        loadNews();
+        initNewsRefresh();
+        
+        // Initialize wallet
+        initWalletControls();
+        
+        // Initialize order execution
+        initOrderExecution();
+        
+        // Wire expand buttons
+        wireExpandButtons();
+        
+        console.log('✅ TradeX Interface Ready!');
+    }
 
-                // Clear all forms
-                document.querySelectorAll('input').forEach(input => input.value = '');
-            }
+    /* =========================================================================
+       📋 SECTION 10: TRADEX - PARTICLES
+       ========================================================================= */
+    
+    function createParticles() {
+        const container = $('#particles');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 20 + 's';
+            p.style.animationDuration = (15 + Math.random() * 15) + 's';
+            container.appendChild(p);
+        }
+    }
+
+    /* =========================================================================
+       📋 SECTION 11: TRADEX - NAVIGATION
+       ========================================================================= */
+    
+    function initTradeNav() {
+        $$('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                $$('.nav-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                $$('.sub-section').forEach(s => s.classList.remove('active'));
+                const target = $('#' + btn.dataset.target);
+                if (target) target.classList.add('active');
+
+                const fab = $('#collab-chart-fab');
+                if (fab) fab.style.display = btn.dataset.target === 'chat-panel' ? 'flex' : 'none';
+
+                if (btn.dataset.target === 'trade-panel') showMarketSelection();
+                if (btn.dataset.target === 'news-panel') loadNews();
+                if (btn.dataset.target === 'chat-panel' && $('#messages')?.children.length === 0) initChat();
+            });
         });
+    }
 
-        // Navigation
-        const allMenuItems = document.querySelectorAll('.nav-item');
-        const pages = document.querySelectorAll('.page-section');
+    /* =========================================================================
+       📋 SECTION 12: TRADEX - FULLSCREEN
+       ========================================================================= */
+    
+    function toggleFullscreen(panelId) {
+        const el = $('#' + panelId);
+        if (!el) return;
 
-        allMenuItems.forEach(item => {
-            item.addEventListener('click', function () {
-                // Remove active class from all items
-                allMenuItems.forEach(mi => mi.classList.remove('active'));
+        if (!el.classList.contains('fullscreen')) {
+            el.classList.add('fullscreen');
+            const close = document.createElement('button');
+            close.className = 'close-full';
+            close.innerHTML = '✕ Close';
+            close.onclick = () => toggleFullscreen(panelId);
+            el.querySelector('.panel-head')?.appendChild(close);
+        } else {
+            el.classList.remove('fullscreen');
+            el.querySelector('.close-full')?.remove();
+        }
+    }
 
-                // Add active to clicked item
-                this.classList.add('active');
+    function wireExpandButtons() {
+        $$('.expand-btn').forEach(b => {
+            b.onclick = () => toggleFullscreen(b.dataset.target);
+        });
+    }
 
-                // Sync desktop and mobile
-                const pageToShow = this.getAttribute('data-page');
-                allMenuItems.forEach(mi => {
-                    if (mi.getAttribute('data-page') === pageToShow) {
-                        mi.classList.add('active');
+    /* =========================================================================
+       📋 SECTION 13: TRADEX - TRADINGVIEW CHART
+       ========================================================================= */
+    
+    function createTradingView(symbol = 'BINANCE:BTCUSDT', containerId = 'tradingview_widget') {
+        const container = $(`#${containerId}`);
+        if (!container || typeof TradingView === 'undefined') return;
+
+        container.innerHTML = '<div style="color:#888; text-align:center; padding:40px;">Loading chart...</div>';
+
+        setTimeout(() => {
+            new TradingView.widget({
+                container_id: containerId,
+                autosize: true,
+                symbol: symbol,
+                interval: "60",
+                timezone: "Etc/UTC",
+                theme: "dark",
+                style: "1",
+                locale: "en",
+                toolbar_bg: "#0a0a0a",
+                enable_publishing: false,
+                allow_symbol_change: true,
+                studies: ["RSI@tv-basicstudies", "MACD@tv-basicstudies"],
+                withdateranges: true,
+                hide_side_toolbar: false,
+                backgroundColor: "#050505",
+            });
+        }, 500);
+    }
+
+    /* =========================================================================
+       📋 SECTION 14: TRADEX - LIGHTWEIGHT CHARTS
+       ========================================================================= */
+    
+    function initLightweightCharts() {
+        if (typeof LightweightCharts === 'undefined') return;
+
+        const volumeEl = $('#volume-chart');
+        const rsiEl = $('#rsi-chart');
+        const macdEl = $('#macd-chart');
+
+        if (volumeEl && !volumeChart) {
+            volumeChart = LightweightCharts.createChart(volumeEl, {
+                width: volumeEl.clientWidth,
+                height: 250,
+                layout: { backgroundColor: '#111', textColor: '#d4af37' },
+                grid: { vertLines: { color: '#222' }, horzLines: { color: '#222' } },
+            });
+            const volumeSeries = volumeChart.addHistogramSeries({ color: '#26a69a' });
+            volumeSeries.setData(generateFakeVolumeData());
+        }
+
+        if (rsiEl && !rsiChart) {
+            rsiChart = LightweightCharts.createChart(rsiEl, {
+                width: rsiEl.clientWidth,
+                height: 250,
+                layout: { backgroundColor: '#111', textColor: '#fff' }
+            });
+            const rsiSeries = rsiChart.addLineSeries({ color: '#d4af37' });
+            rsiSeries.setData(generateFakeRSIData());
+        }
+
+        if (macdEl && !macdChart) {
+            macdChart = LightweightCharts.createChart(macdEl, {
+                width: macdEl.clientWidth,
+                height: 250,
+                layout: { backgroundColor: '#111', textColor: '#fff' }
+            });
+            const macdLine = macdChart.addLineSeries({ color: '#2962FF' });
+            const signalLine = macdChart.addLineSeries({ color: '#FF6B6B' });
+            macdLine.setData(generateFakeMACDData());
+            signalLine.setData(generateFakeMACDData().map((d, i) => ({
+                time: d.time,
+                value: d.value * 0.8 + i * 0.1
+            })));
+        }
+    }
+
+    function generateFakeVolumeData() {
+        const data = [];
+        let time = Math.floor(Date.now() / 1000) - 86400 * 30;
+        for (let i = 0; i < 100; i++) {
+            data.push({ time: time += 3600, value: Math.random() * 1000000 + 500000 });
+        }
+        return data;
+    }
+
+    function generateFakeRSIData() {
+        const data = [];
+        let time = Math.floor(Date.now() / 1000) - 86400 * 30;
+        for (let i = 0; i < 100; i++) {
+            data.push({ time: time += 3600, value: 30 + Math.random() * 40 });
+        }
+        return data;
+    }
+
+    function generateFakeMACDData() {
+        const data = [];
+        let time = Math.floor(Date.now() / 1000) - 86400 * 30;
+        for (let i = 0; i < 100; i++) {
+            data.push({ time: time += 3600, value: (Math.random() - 0.5) * 2000 });
+        }
+        return data;
+    }
+
+    /* =========================================================================
+       📋 SECTION 15: TRADEX - MARKET SELECTION
+       ========================================================================= */
+    
+    function showMarketSelection() {
+        const selection = $('#market-selection-view');
+        const crypto = $('#crypto-interface');
+        const forex = $('#forex-interface');
+        
+        if (selection) selection.style.display = 'block';
+        if (crypto) crypto.style.display = 'none';
+        if (forex) forex.style.display = 'none';
+        
+        currentMarket = null;
+        disconnectOrderbook();
+    }
+
+    function initMarketSelection() {
+        $('.market-card').forEach(card => {
+            card.addEventListener('click', () => {
+                currentMarket = card.dataset.market;
+                const selection = $('#market-selection-view');
+                if (selection) selection.style.display = 'none';
+
+                if (currentMarket === 'crypto') {
+                    const crypto = $('#crypto-interface');
+                    if (crypto) {
+                        crypto.style.display = 'block';
+                        crypto.classList.add('active');
                     }
-                });
-
-                // Hide all pages
-                pages.forEach(page => page.classList.remove('active'));
-
-                // Show selected page
-                if (pageToShow === 'analytics') {
-                    document.getElementById('analyticsPage').classList.add('active');
-                } else if (pageToShow === 'mou') {
-                    document.getElementById('mouPage').classList.add('active');
+                    connectOrderbook('BTCUSDT');
+                    createTradingView('BINANCE:BTCUSDT');
+                } else {
+                    const forex = $('#forex-interface');
+                    if (forex) {
+                        forex.style.display = 'block';
+                        forex.classList.add('active');
+                    }
+                    mockForexOrderbook();
                 }
-
-                // Close mobile menu
-                document.getElementById('mobileMenu').classList.remove('active');
             });
         });
 
-        /* =====================================================
-           🔍 ADMIN HELPER FUNCTIONS (CONSOLE)
-           ===================================================== */
+        $('#back-to-selection')?.addEventListener('click', showMarketSelection);
+        $('#back-to-selection-forex')?.addEventListener('click', showMarketSelection);
+    }
 
-        // Get all users (Admin only - use in console)
-        window.getAllUsers = async function () {
+    /* =========================================================================
+       📋 SECTION 16: TRADEX - TRADING CONTROLS
+       ========================================================================= */
+    
+    function initTradingMode() {
+        $('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                $('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.dataset.mode;
+                
+                const spotControls = $('#order-controls-spot');
+                const derivControls = $('#order-controls-derivative');
+                
+                if (spotControls) spotControls.style.display = currentMode === 'spot' ? 'grid' : 'none';
+                if (derivControls) derivControls.style.display = currentMode === 'spot' ? 'none' : 'grid';
+            });
+        });
+    }
+
+    function initSideButtons() {
+        $('.side-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.querySelectorAll('.side-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentSide = btn.dataset.side;
+            });
+        });
+    }
+
+    function initLeverageControl() {
+        $('.leverage-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                $('.leverage-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLeverage = parseInt(btn.dataset.lev);
+                const leverageInput = $('#leverage');
+                if (leverageInput) leverageInput.value = '';
+            });
+        });
+
+        const leverageInput = $('#leverage');
+        if (leverageInput) {
+            leverageInput.addEventListener('change', function() {
+                if (this.value && !highLeverageUnlocked) {
+                    showPinModal();
+                    this.value = '';
+                } else if (this.value) {
+                    currentLeverage = parseInt(this.value);
+                    $('.leverage-btn').forEach(b => b.classList.remove('active'));
+                }
+            });
+        }
+    }
+
+    function initTPSLModeToggles() {
+        $('[data-tp-mode]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.querySelectorAll('.mode-toggle-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                tpMode = btn.dataset.tpMode;
+            });
+        });
+        
+        $('[data-sl-mode]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.querySelectorAll('.mode-toggle-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                slMode = btn.dataset.slMode;
+            });
+        });
+    }
+
+    /* =========================================================================
+       📋 SECTION 17: TRADEX - ORDER EXECUTION
+       ========================================================================= */
+    
+    function initOrderExecution() {
+        const placeOrderBtn = $('#place-order');
+        if (placeOrderBtn) {
+            placeOrderBtn.addEventListener('click', () => {
+                const price = $('#order-price')?.value || 'Market';
+                const qty = $('#order-qty')?.value || $('#order-qty-deriv')?.value || '0';
+                const tp = $('#tp-value')?.value || 'None';
+                const sl = $('#sl-value')?.value || 'None';
+
+                addMessage(`Order Executed: ${currentSide.toUpperCase()} ${qty} BTC @ ${price} | TP: ${tp} | SL: ${sl} | Lev: ${currentLeverage}x`, 'them');
+                alert(`Order Placed!\n${currentSide.toUpperCase()} ${qty} BTC\nLeverage: ${currentLeverage}x\nTP/SL set`);
+            });
+        }
+
+        const placeForexBtn = $('#place-forex-order');
+        if (placeForexBtn) {
+            placeForexBtn.addEventListener('click', () => {
+                const pair = $('#forex-pair')?.value || 'EUR/USD';
+                const lots = $('#forex-lots')?.value || '0';
+                alert(`Forex Order Executed!\nPair: ${pair}\nLots: ${lots}`);
+            });
+        }
+    }
+
+    /* =========================================================================
+       📋 SECTION 18: TRADEX - ORDERBOOK WEBSOCKET
+       ========================================================================= */
+    
+    function connectOrderbook(symbol = 'BTCUSDT') {
+        disconnectOrderbook();
+        const ws = new WebSocket(CONFIG.TRADING.WS_ORDERBOOK_URL(symbol));
+
+        ws.onopen = () => console.log('📊 Orderbook connected');
+        
+        ws.onmessage = (e) => {
             try {
-                const { data, error } = await db
-                    .from('users')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-
-                console.log('%c 👥 ALL REGISTERED USERS:', 'color: #d4af37; font-weight: bold; font-size: 16px;');
-                console.table(data.map(u => ({
-                    Name: u.name,
-                    Email: u.email,
-                    Verified: u.email_verified ? '✅' : '❌',
-                    Created: new Date(u.created_at).toLocaleDateString()
-                })));
-                return data;
-            } catch (error) {
-                console.error('Error fetching users:', error);
-                return null;
+                const data = JSON.parse(e.data);
+                if (data.b || data.a) renderOrderbook(data.b || [], data.a || []);
+            } catch (err) {
+                console.error('Orderbook parse error:', err);
             }
         };
-
-        // Get user by email (Admin only - use in console)
-        window.getUserByEmail = async function (email) {
-            try {
-                const { data, error } = await db
-                    .from('users')
-                    .select('*')
-                    .eq('email', email.toLowerCase())
-                    .single();
-
-                if (error) throw error;
-
-                console.log('%c 👤 USER DETAILS:', 'color: #d4af37; font-weight: bold; font-size: 16px;');
-                console.log({
-                    Name: data.name,
-                    Email: data.email,
-                    'Email Verified': data.email_verified ? '✅ Yes' : '❌ No',
-                    'Created': new Date(data.created_at).toLocaleString()
-                });
-                return data;
-            } catch (error) {
-                console.error('User not found:', error);
-                return null;
-            }
+        
+        ws.onclose = () => {
+            console.log('Orderbook disconnected, reconnecting...');
+            setTimeout(() => connectOrderbook(symbol), 3000);
         };
+        
+        ws.onerror = () => ws.close();
 
-        // Delete user (Admin only - use in console - DANGEROUS!)
-        window.deleteUser = async function (email) {
-            if (!confirm(`⚠️ WARNING: Delete user ${email}? This cannot be undone!`)) {
+        obSocket = ws;
+    }
+
+    function disconnectOrderbook() {
+        if (obSocket) {
+            obSocket.close();
+            obSocket = null;
+        }
+        const bids = $('#ob-bids');
+        const asks = $('#ob-asks');
+        if (bids) bids.innerHTML = '';
+        if (asks) asks.innerHTML = '';
+    }
+
+    function renderOrderbook(bids = [], asks = []) {
+        const format = (arr) => arr.slice(0, 10).map(([p, q]) => {
+            const price = parseFloat(p).toFixed(2);
+            const qty = parseFloat(q).toFixed(4);
+            const total = (price * qty).toFixed(2);
+            return { price, qty, total };
+        });
+
+        const bidsEl = $('#ob-bids');
+        const asksEl = $('#ob-asks');
+        
+        if (bidsEl) {
+            bidsEl.innerHTML = format(bids).map(row => `
+                <div class="ob-row bid"><span>${row.price}</span><span>${row.qty}</span><span>${row.total}</span></div>
+            `).join('');
+        }
+
+        if (asksEl) {
+            asksEl.innerHTML = format(asks).reverse().map(row => `
+                <div class="ob-row ask"><span>${row.price}</span><span>${row.qty}</span><span>${row.total}</span></div>
+            `).join('');
+        }
+
+        if (bids[0] && asks[0]) {
+            const spread = $('#spread');
+            if (spread) {
+                spread.textContent = (parseFloat(asks[0][0]) - parseFloat(bids[0][0])).toFixed(2);
+            }
+        }
+    }
+
+    function mockForexOrderbook() {
+        renderOrderbook(
+            [['1.1000', '1200000'], ['1.0998', '1000000'], ['1.0996', '800000']],
+            [['1.1001', '1100000'], ['1.1003', '900000'], ['1.1005', '700000']]
+        );
+    }
+
+    /* =========================================================================
+       📋 SECTION 19: TRADEX - NEWS
+       ========================================================================= */
+    
+    async function loadNews() {
+        const list = $('#news-list');
+        if (!list) return;
+
+        list.innerHTML = '<div class="muted text-center">📡 Loading news...</div>';
+
+        try {
+            const res = await fetch(`${CONFIG.TRADING.BACKEND_URL}/news`);
+            const data = await res.json();
+
+            if (!data || !data.length) {
+                list.innerHTML = '<div class="muted text-center">No news available</div>';
                 return;
             }
 
-            try {
-                const { error } = await db
-                    .from('users')
-                    .delete()
-                    .eq('email', email.toLowerCase());
+            list.innerHTML = data.map(n => `
+                <div class="news-item">
+                    <div class="news-meta">${new Date(n.published || n.publishedAt).toLocaleString()} • ${n.source}</div>
+                    <a href="${n.url}" target="_blank" class="news-link">${n.title}</a>
+                    <div class="news-desc">${n.description || ''}</div>
+                </div>
+            `).join('');
+        } catch (e) {
+            console.error('News load error:', e);
+            list.innerHTML = '<div class="muted text-center">⚠️ Failed to load news. Make sure backend is running.</div>';
+        }
+    }
 
-                if (error) throw error;
+    function initNewsRefresh() {
+        const btn = $('#refresh-news');
+        if (btn) btn.addEventListener('click', loadNews);
+    }
 
-                console.log(`✅ User ${email} deleted successfully`);
-                return true;
-            } catch (error) {
-                console.error('Error deleting user:', error);
-                return false;
+    /* =========================================================================
+       📋 SECTION 20: TRADEX - CHAT
+       ========================================================================= */
+    
+    function addMessage(text, sender = 'me') {
+        const messages = $('#messages');
+        if (!messages) return;
+        
+        const msg = document.createElement('div');
+        msg.className = `msg ${sender}`;
+        msg.textContent = text;
+        messages.appendChild(msg);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    function initChat() {
+        addMessage('Welcome to EliteTraders Room', 'them');
+        addMessage('Type /help for commands', 'them');
+
+        const sendBtn = $('#send-btn');
+        const chatInput = $('#chat-input');
+        
+        if (sendBtn && chatInput) {
+            sendBtn.onclick = () => {
+                if (chatInput.value.trim()) {
+                    addMessage(chatInput.value, 'me');
+                    chatInput.value = '';
+                }
+            };
+
+            chatInput.addEventListener('keypress', e => {
+                if (e.key === 'Enter') sendBtn.click();
+            });
+        }
+    }
+
+    /* =========================================================================
+       📋 SECTION 21: TRADEX - EMOJI PICKER
+       ========================================================================= */
+    
+    const EMOJIS = ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '🥲', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '🥴', '😵', '🤯', '🤠', '🥳', '🥸', '😎', '🤓', '🧐'];
+
+    const emojiBtn = $('#emoji-btn');
+    if (emojiBtn) {
+        emojiBtn.onclick = () => {
+            const picker = $('#emoji-picker');
+            const grid = $('#emoji-grid');
+            
+            if (!picker) return;
+            
+            picker.classList.toggle('active');
+            
+            if (picker.classList.contains('active') && grid) {
+                grid.innerHTML = EMOJIS.map(e => `<div class="emoji-item">${e}</div>`).join('');
+                
+                $('.emoji-item').forEach(item => {
+                    item.onclick = () => {
+                        const chatInput = $('#chat-input');
+                        if (chatInput) {
+                            chatInput.value += item.textContent;
+                            chatInput.focus();
+                        }
+                        picker.classList.remove('active');
+                    };
+                });
             }
         };
+    }
 
-        // Update user email verification status (Admin only)
-        window.verifyUserEmail = async function (email) {
-            try {
-                const { error } = await db
-                    .from('users')
-                    .update({
-                        email_verified: true,
-                        verification_code: null
-                    })
-                    .eq('email', email.toLowerCase());
-
-                if (error) throw error;
-
-                console.log(`✅ User ${email} email verified successfully`);
-                return true;
-            } catch (error) {
-                console.error('Error verifying user:', error);
-                return false;
+    /* =========================================================================
+       📋 SECTION 22: TRADEX - COLLABORATIVE CHART
+       ========================================================================= */
+    
+    const collabFab = $('#collab-chart-fab');
+    if (collabFab) {
+        collabFab.onclick = () => {
+            const modal = $('#collab-chart-modal');
+            if (modal) {
+                modal.classList.add('active');
+                setTimeout(() => createTradingView('BINANCE:BTCUSDT', 'collab-tradingview'), 500);
             }
         };
+    }
 
-        /* =====================================================
-           📊 CONSOLE WELCOME MESSAGE
-           ===================================================== */
+    const closeCollab = $('#close-collab');
+    if (closeCollab) {
+        closeCollab.onclick = () => {
+            const modal = $('#collab-chart-modal');
+            if (modal) modal.classList.remove('active');
+        };
+    }
 
-        console.log('%c ═══════════════════════════════════════════════════════════════ ', 'background: #000; color: #d4af37;');
-        console.log('%c 🏆 SPROUTLIGHT CAPITAL - LIVE PRODUCTION PORTAL 🏆 ', 'background: #d4af37; color: #000; font-size: 16px; font-weight: bold; padding: 10px;');
-        console.log('%c ═══════════════════════════════════════════════════════════════ ', 'background: #000; color: #d4af37;');
-        console.log('');
-        console.log('%c ✅ LIVE MODE - FULLY FUNCTIONAL ', 'background: #10b981; color: white; font-size: 14px; font-weight: bold; padding: 8px;');
-        console.log('');
-        console.log('%c 🔐 FEATURES ENABLED: ', 'color: #d4af37; font-weight: bold;');
-        console.log('  ✓ Supabase Database Integration');
-        console.log('  ✓ EmailJS Email Service');
-        console.log('  ✓ Email Verification with Codes');
-        console.log('  ✓ Password Reset with Email Codes');
-        console.log('  ✓ PIN Verification');
-        console.log('  ✓ Secure Password Hashing (SHA-256)');
-        console.log('  ✓ Session Management');
-        console.log('');
-        console.log('%c 🎫 VALID INVITATION CODES: ', 'color: #d4af37; font-weight: bold;');
-        CONFIG.INVITATION_CODES.forEach(code => console.log(`  • ${code}`));
-        console.log('');
-        console.log('%c 🛠️ ADMIN COMMANDS (Use in Console): ', 'background: #3b82f6; color: white; font-size: 14px; font-weight: bold; padding: 8px;');
-        console.log('  • getAllUsers() - View all registered users');
-        console.log('  • getUserByEmail("email@example.com") - Get specific user details');
-        console.log('  • verifyUserEmail("email@example.com") - Manually verify user email');
-        console.log('  • deleteUser("email@example.com") - Delete user (DANGEROUS!)');
-        console.log('');
-        console.log('%c 📧 EMAIL TEMPLATE SETUP REQUIRED: ', 'background: #f59e0b; color: white; font-size: 14px; font-weight: bold; padding: 8px;');
-        console.log('  1. Go to https://dashboard.emailjs.com/');
-        console.log('  2. Create a new email template with ID: ' + CONFIG.EMAILJS.TEMPLATE_ID);
-        console.log('  3. Add these variables to your template:');
-        console.log('     • {{to_name}} - Recipient name');
-        console.log('     • {{verification_code}} - The 6-digit code');
-        console.log('     • {{message}} - Email message');
-        console.log('');
-        console.log('%c 🗄️ DATABASE SETUP: ', 'background: #8b5cf6; color: white; font-size: 14px; font-weight: bold; padding: 8px;');
-        console.log('  Table: users');
-        console.log('  Columns:');
-        console.log('    • id (uuid, primary key)');
-        console.log('    • name (text)');
-        console.log('    • email (text, unique)');
-        console.log('    • password (text, hashed)');
-        console.log('    • pin (text, hashed)');
-        console.log('    • email_verified (boolean, default: false)');
-        console.log('    • verification_code (text, nullable)');
-        console.log('    • reset_code (text, nullable)');
-        console.log('    • created_at (timestamp)');
-        console.log('');
-        console.log('%c 🚀 YOUR PORTAL IS NOW LIVE! ', 'background: #ef4444; color: white; font-size: 16px; font-weight: bold; padding: 10px;');
-        console.log('%c Traders can now sign up and access the platform! ', 'color: #10b981; font-weight: bold;');
-        console.log('%c ═══════════════════════════════════════════════════════════════ ', 'background: #000; color: #d4af37;');
+    const minimizeCollab = $('#minimize-collab');
+    if (minimizeCollab) {
+        minimizeCollab.onclick = () => {
+            const modal = $('#collab-chart-modal');
+            if (modal) modal.classList.remove('active');
+        };
+    }
 
-    </script>
+    /* =========================================================================
+       📋 SECTION 23: TRADEX - WALLET CONNECTION
+       ========================================================================= */
+    
+    const WALLET_OPTIONS = {
+        desktop: [
+            { id: 'metamask', name: 'MetaMask', icon: '🦊', desc: 'Most popular Web3 wallet' },
+            { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔵', desc: 'Secure and easy to use' },
+            { id: 'walletconnect', name: 'WalletConnect', icon: '🔗', desc: 'Connect any wallet' },
+            { id: 'phantom', name: 'Phantom', icon: '👻', desc: 'Solana & Multi-chain' }
+        ],
+        mobile: [
+            { id: 'metamask', name: 'MetaMask', icon: '🦊', desc: 'Open in MetaMask app' },
+            { id: 'trust', name: 'Trust Wallet', icon: '🛡️', desc: 'Secure mobile wallet' },
+            { id: 'rainbow', name: 'Rainbow', icon: '🌈', desc: 'Modern mobile wallet' },
+            { id: 'walletconnect', name: 'WalletConnect', icon: '🔗', desc: 'Scan QR code' }
+        ]
+    };
 
+    function updateWalletStatus(addr) {
+        const status = $('#wallet-status');
+        if (!status) return;
+        
+        status.textContent = addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : 'Connect Wallet';
+        status.classList.toggle('disconnected', !addr);
+    }
+
+    function showWalletModal() {
+        const modal = $('#wallet-modal');
+        const list = $('#wallet-list');
+        
+        if (!modal || !list) return;
+        
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const wallets = isMobile ? WALLET_OPTIONS.mobile : WALLET_OPTIONS.desktop;
+
+        list.innerHTML = wallets.map(w => `
+            <div class="wallet-option" data-id="${w.id}">
+                <div class="wallet-icon">${w.icon}</div>
+                <div class="wallet-info">
+                    <div class="wallet-name">${w.name}</div>
+                    <div class="wallet-desc">${w.desc}</div>
+                </div>
+            </div>
+        `).join('');
+
+        modal.classList.add('active');
+
+        $('.wallet-option').forEach(opt => {
+            opt.onclick = async () => {
+                if (opt.dataset.id === 'metamask' && window.ethereum) {
+                    try {
+                        await window.ethereum.request({ method: 'eth_requestAccounts' });
+                        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                        wallet.connected = true;
+                        wallet.address = accounts[0];
+                        updateWalletStatus(accounts[0]);
+                        addMessage(`Wallet Connected: ${accounts[0].slice(0, 10)}...`, 'them');
+                    } catch (err) {
+                        alert('MetaMask connection failed');
+                    }
+                } else {
+                    alert(`${opt.querySelector('.wallet-name').textContent} coming soon`);
+                }
+                modal.classList.remove('active');
+            };
+        });
+    }
+
+    function initWalletControls() {
+        const walletStatus = $('#wallet-status');
+        if (walletStatus) {
+            walletStatus.onclick = () => {
+                if (wallet.connected) {
+                    wallet.connected = false;
+                    wallet.address = null;
+                    updateWalletStatus(null);
+                } else {
+                    showWalletModal();
+                }
+            };
+        }
+
+        const cancelWallet = $('#cancel-wallet');
+        if (cancelWallet) {
+            cancelWallet.onclick = () => {
+                const modal = $('#wallet-modal');
+                if (modal) modal.classList.remove('active');
+            };
+        }
+    }
+
+    /* =========================================================================
+       📋 SECTION 24: TRADEX - PIN MODAL (HIGH LEVERAGE)
+       ========================================================================= */
+    
+    function showPinModal() {
+        const modal = $('#pin-modal');
+        if (!modal) return;
+        
+        modal.classList.add('active');
+        
+        $('.pin-input').forEach((el, i) => {
+            el.value = '';
+            el.oninput = (e) => {
+                if (e.target.value.length === 1 && i < 3) {
+                    $('.pin-input')[i + 1]?.focus();
+                }
+            };
+            el.onkeydown = (e) => {
+                if (e.key === 'Backspace' && !el.value && i > 0) {
+                    $('.pin-input')[i - 1]?.focus();
+                }
+            };
+        });
+        
+        $('.pin-input')[0]?.focus();
+    }
+
+    const verifyPinBtn = $('#verify-pin');
+    if (verifyPinBtn) {
+        verifyPinBtn.onclick = () => {
+            const pin = $('.pin-input').map(i => i.value).join('');
+            if (pin === CONFIG.TRADING.DEFAULT_PIN) {
+                highLeverageUnlocked = true;
+                const modal = $('#pin-modal');
+                if (modal) modal.classList.remove('active');
+                addMessage('High Leverage Unlocked (25x–100x)', 'them');
+            } else {
+                alert('Wrong PIN. Hint: 1234');
+            }
+        };
+    }
+
+    const cancelPinBtn = $('#cancel-pin');
+    if (cancelPinBtn) {
+        cancelPinBtn.onclick = () => {
+            const modal = $('#pin-modal');
+            if (modal) modal.classList.remove('active');
+        };
+    }
+
+    /* =========================================================================
+       📋 SECTION 25: ADMIN HELPER FUNCTIONS
+       ========================================================================= */
+    
+    window.getAllUsers = async function() {
+        try {
+            const { data, error } = await db
+                .from('users')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            console.log('%c 👥 ALL REGISTERED USERS:', 'color: #d4af37; font-weight: bold; font-size: 16px;');
+            console.table(data.map(u => ({
+                Name: u.name,
+                Email: u.email,
+                Verified: u.email_verified ? '✅' : '❌',
+                Created: new Date(u.created_at).toLocaleDateString()
+            })));
+            return data;
+        } catch (error) {
+            console.error('Error fetching users:', error);
+            return null;
+        }
+    };
+
+    window.getUserByEmail = async function(email) {
+        try {
+            const { data, error } = await db
+                .from('users')
+                .select('*')
+                .eq('email', email.toLowerCase())
+                .single();
+
+            if (error) throw error;
+
+            console.log('%c 👤 USER DETAILS:', 'color: #d4af37; font-weight: bold; font-size: 16px;');
+            console.log({
+                Name: data.name,
+                Email: data.email,
+                'Email Verified': data.email_verified ? '✅ Yes' : '❌ No',
+                'Created': new Date(data.created_at).toLocaleString()
+            });
+            return data;
+        } catch (error) {
+            console.error('User not found:', error);
+            return null;
+        }
+    };
+
+    window.deleteUser = async function(email) {
+        if (!confirm(`⚠️ WARNING: Delete user ${email}? This cannot be undone!`)) {
+            return;
+        }
+
+        try {
+            const { error } = await db
+                .from('users')
+                .delete()
+                .eq('email', email.toLowerCase());
+
+            if (error) throw error;
+
+            console.log(`✅ User ${email} deleted successfully`);
+            return true;
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            return false;
+        }
+    };
+
+    window.verifyUserEmail = async function(email) {
+        try {
+            const { error } = await db
+                .from('users')
+                .update({
+                    email_verified: true,
+                    verification_code: null
+                })
+                .eq('email', email.toLowerCase());
+
+            if (error) throw error;
+
+            console.log(`✅ User ${email} email verified successfully`);
+            return true;
+        } catch (error) {
+            console.error('Error verifying user:', error);
+            return false;
+        }
+    };
+
+    /* =========================================================================
+       📋 SECTION 26: CONSOLE WELCOME MESSAGE
+       ========================================================================= */
+    
+    console.log('%c ═══════════════════════════════════════════════════════════════ ', 'background: #000; color: #d4af37;');
+    console.log('%c 🏆 SPROUTLIGHT CAPITAL - LIVE PRODUCTION PORTAL 🏆 ', 'background: #d4af37; color: #000; font-size: 16px; font-weight: bold; padding: 10px;');
+    console.log('%c ═══════════════════════════════════════════════════════════════ ', 'background: #000; color: #d4af37;');
+    console.log('');
+    console.log('%c ✅ LIVE MODE - FULLY FUNCTIONAL ', 'background: #10b981; color: white; font-size: 14px; font-weight: bold; padding: 8px;');
+    console.log('');
+    console.log('%c 🔐 FEATURES ENABLED: ', 'color: #d4af37; font-weight: bold;');
+    console.log('  ✓ Supabase Database Integration');
+    console.log('  ✓ EmailJS Email Service');
+    console.log('  ✓ Email Verification with Codes');
+    console.log('  ✓ Password Reset with Email Codes');
+    console.log('  ✓ PIN Verification');
+    console.log('  ✓ TradeX Trading Interface');
+    console.log('  ✓ Live Orderbook (Binance WebSocket)');
+    console.log('  ✓ TradingView Charts');
+    console.log('  ✓ Wallet Connection');
+    console.log('');
+    console.log('%c 🛠️ ADMIN COMMANDS: ', 'background: #3b82f6; color: white; font-size: 14px; font-weight: bold; padding: 8px;');
+    console.log('  • getAllUsers() - View all registered users');
+    console.log('  • getUserByEmail("email@example.com") - Get specific user');
+    console.log('  • verifyUserEmail("email@example.com") - Manually verify user');
+    console.log('  • deleteUser("email@example.com") - Delete user');
+    console.log('');
+    console.log('%c 🚀 SYSTEM READY! ', 'background: #ef4444; color: white; font-size: 16px; font-weight: bold; padding: 10px;');
+    console.log('%c ═══════════════════════════════════════════════════════════════ ', 'background: #000; color: #d4af37;');
+
+</script>
 </body>
 
-</html>
+</html> 
